@@ -2,8 +2,8 @@ def cislo_text(cislo):
     # funkce zkonvertuje cislo do jeho textove reprezentace
     # napr: "25" -> "dvacet pět", omezte se na cisla od 0 do 100
 
-    # 13/10/2024 VRBAT - fction implementation
-    cislo = int(cislo)   
+    # 13/10/2024 VRBAT - implementation
+    cislo = int(cislo) #ošetření pouze celá čísla - integer
 
     if cislo < 0 or cislo > 100: #kontrola intervalu <0;100>
         return "Vyberte prosím číslo od 0 do 100"
@@ -19,21 +19,16 @@ def cislo_text(cislo):
          interval_11_az_19 = {11: "jedenáct", 12: "dvanáct", 13:"třináct", 14:"čtrnáct", 15:"patnáct", 16:"šestnáct", 17:"sedmnáct", 18:"osmnáct", 19:"devatenáct"}
          return interval_11_az_19[cislo]
       
-      if cislo >= 11 and cislo <= 19:
-         interval_11_az_19 = {11: "jedenáct", 12: "dvanáct", 13:"třináct", 14:"čtrnáct", 15:"patnáct", 16:"šestnáct", 17:"sedmnáct", 18:"osmnáct", 19:"devatenáct"}
-         return interval_11_az_19[cislo]
-      
       if cislo > 20 and cislo < 99: 
          interval_desitky = {2: "dvacet", 3: "třicet", 4: "čtyřicet", 5: "padesát", 6: "šedesát", 7: "sedmdesát", 8: "osmdesát", 9: "devadesát"}
-         vysledek_desitky = cislo//10
-         vysledek_jednotky = cislo%10 
-         vysledek = interval_desitky[vysledek_desitky] + interval_1_az_9[vysledek_jednotky]
-         return vysledek
+         interval_1_az_9 = {1: "jedna", 2: "dva", 3: "tři", 4:"čtyři", 5:"pět", 6:"šest", 7:"sedm", 8:"osm", 9:"devět"}
+         vysledek_desitky = cislo//10 #vypíše číslo desítek
+         vysledek_jednotky = cislo%10 # vypíše číslo jednotek
+         return interval_desitky[vysledek_desitky] + " " + interval_1_az_9[vysledek_jednotky] #já vím, ta " ", ale fuguje to :-)
       
       if cislo == 100:
          return "sto"
      
-
 if __name__ == "__main__":
     cislo = input("Zadej číslo: ")
     text = cislo_text(cislo)
