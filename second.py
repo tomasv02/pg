@@ -24,11 +24,15 @@ def cislo_text(cislo):
          return interval_11_az_19[cislo]
       
       if cislo > 20 and cislo < 99: 
-         intervaů = {2: "dvacet", 3: "třicet", 4: "čtyřicet", 5: "padesát", 6: "šedesát", 7: "sedmdesát", 8: "osmdesát", 9: "devadesát"}
+         interval_desitky = {2: "dvacet", 3: "třicet", 4: "čtyřicet", 5: "padesát", 6: "šedesát", 7: "sedmdesát", 8: "osmdesát", 9: "devadesát"}
+         vysledek_desitky = cislo//10
+         vysledek_jednotky = cislo%10 
+         vysledek = interval_desitky[vysledek_desitky] + interval_1_az_9[vysledek_jednotky]
+         return vysledek
+      
       if cislo == 100:
          return "sto"
      
-
 
 if __name__ == "__main__":
     cislo = input("Zadej číslo: ")
