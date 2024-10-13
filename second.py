@@ -2,7 +2,7 @@ def cislo_text(cislo):
     # funkce zkonvertuje cislo do jeho textove reprezentace
     # napr: "25" -> "dvacet pět", omezte se na cisla od 0 do 100
     # 13/10/2024 VRBAT - fction implementation
-    if cislo is "": 
+    if cislo == "": 
         print("Číslo nebylo zadáno.")
         exit
     elif cislo is not int: 
