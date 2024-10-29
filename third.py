@@ -1,13 +1,13 @@
 import time
 import math
-#29/10/2024 VRBAT - first dev.
+
 def je_prvocislo(cislo):
     """
     Funkce overi, zda zadane cislo je nebo neni prvocislo a vrati True nebo False
 
     Prvocislo je takove cislo vetsi nez 1, ktere neni delitelne zadnym jinym cislem jenom 1 a samo sebou.
 
-    Napoveda jak otestova prvocislo:
+    Napoveda jak otestovat prvocislo:
     Cislo 36 vznikne nasobenim:
     1 * 36
     2 * 18
@@ -20,19 +20,34 @@ def je_prvocislo(cislo):
     36 * 1
     Jak vidite v druhe polovine se dvojice opakuji, tzn. v tomto pripade staci overit delitelnost pouze do 6 (vcetne)
     """
+    #29/10/2024 VRBAT - dev.
     cislo = int(cislo)
+    vysledek = False
+
     if cislo <= 1:
         return False
     i = 0
-    #for delitel in range(2, round(cislo**0.5)):
-    for delitel in range(2, cislo):
-        time.sleep(0.001)
-        if cislo % delitel == 0:
-            print(f'Iterace {i}')
-            return False
-        i += 1
-    print(f'Iterace: {i}')
-    return True
+
+    #kontrola, zda je vstup prvočíslo
+    if cislo > 1: 
+        for i in range(2, cislo):
+            if (cislo % i) == 0:
+                vysledek = True #nastaví flag na pravdu, jinak false
+                break #zastaví loop (konec dělitelnosti)
+           
+    if vysledek: 
+        return False
+    else:
+        for i in range(2, round(cislo**0.5)):
+            for i in range(2, cislo):
+                time.sleep(0.001)
+            if cislo % i == 0:
+                print(f'Iterace {i}')
+                return False
+                i += 1
+
+        print(f'Iterace: {i}')
+        return True
 
 def vrat_prvocisla(maximum):
     """
