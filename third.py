@@ -1,5 +1,6 @@
 import time
 import math
+import sys
 
 def je_prvocislo(cislo):
     """
@@ -22,6 +23,7 @@ def je_prvocislo(cislo):
     """
     #29/10/2024 VRBAT - dev.
     cislo = int(cislo)
+    global vysledek
     vysledek = False
 
     if cislo <= 1:
@@ -35,34 +37,36 @@ def je_prvocislo(cislo):
                 vysledek = True #nastaví flag na pravdu, jinak false
                 break #zastaví loop (konec dělitelnosti)
            
-    if vysledek: 
+    if vysledek:
         return False
     else:
-        for i in range(2, round(cislo**0.5)):
-            for i in range(2, cislo):
-                time.sleep(0.001)
-            if cislo % i == 0:
-                print(f'Iterace {i}')
-                return False
-                i += 1
+    #    for i in range(2, round(cislo**0.5)):
+    #        for i in range(2, cislo):
+    #            time.sleep(0.001)
+    #        if cislo % i == 0:
+    #            print(f'Iterace {i}')
+    #            return False
+    #            i += 1
 
-        print(f'Iterace: {i}')
+    #    print(f'Iterace: {i}')
         return True
 
 def vrat_prvocisla(maximum):
     """
     Funkce spocita vsechna prvocisla v rozsahu 1 az maximum a vrati je jako seznam.
     """
-    maximum = int(maximum)
-    results = []
-    for i in range(2, maximum + 1):
-        if je_prvocislo(i):
-            results.append(i)
-    return results
+    if vysledek == False: 
+        SystemExit
+    else: 
+        maximum = int(maximum)
+        results = []
+        for i in range(2, maximum + 1):
+            if je_prvocislo(i):
+                results.append(i)
+        return results
 
 if __name__ == "__main__":
     cislo = input("Zadej maximum: ")
-    # 999983
     print(je_prvocislo(cislo))
-    # prvocisla = vrat_prvocisla(cislo)
-    # print(prvocisla)
+    prvocisla = vrat_prvocisla(cislo)
+    print(prvocisla)
