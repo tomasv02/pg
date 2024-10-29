@@ -55,7 +55,7 @@ def vrat_prvocisla(maximum):
     """
     Funkce spocita vsechna prvocisla v rozsahu 1 az maximum a vrati je jako seznam.
     """
-    if vysledek != False: 
+    if vysledek != False: #<> nebo NE
         return "Zadané číslo není prvočíslo"
     else: 
         maximum = int(maximum)
