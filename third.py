@@ -1,6 +1,6 @@
 import time
 import math
-
+#29/10/2024 VRBAT - first dev.
 def je_prvocislo(cislo):
     """
     Funkce overi, zda zadane cislo je nebo neni prvocislo a vrati True nebo False
