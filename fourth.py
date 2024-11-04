@@ -60,7 +60,7 @@ def je_tah_mozny(figurka, cilove_pole, obsazene_pozice):
         else:
             condition3 = False
 
-    #Kůň 
+    #kůň 
     elif figurka["typ"] == "jezdec":
         osa1 = abs(cilove_pole[0] - figurka["pozice"][0])
         osa2 = abs(cilove_pole[1] - figurka["pozice"][1])
@@ -92,8 +92,7 @@ def je_tah_mozny(figurka, cilove_pole, obsazene_pozice):
         else:
             condition3 = False
 
-
-    #Král 
+    #král 
     elif figurka["typ"] == "král":
         #kontrola sloupec (vertikálně)
         if cilove_pole[0] == figurka["pozice"][0] and abs(cilove_pole[0] - figurka["pozice"][0] <= 1):
@@ -125,7 +124,6 @@ def je_tah_mozny(figurka, cilove_pole, obsazene_pozice):
 
     #výsledek
     return f"Tah {figurka["7p"]} z pole {figurka["pozice"]} na pole {cilove_pole} je {condition1 and condition2 and condition3 and condition4}"
-
 
 # Test fce; # = výsledky (ze zadání)
 if __name__ == "__main__":
