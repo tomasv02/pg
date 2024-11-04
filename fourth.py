@@ -29,7 +29,7 @@ def je_tah_mozny(figurka, cilove_pole, obsazene_pozice):
 
     #Střelec
     elif figurka["typ"] == "střelec": 
-        if abs(figurka["pozice"][0] - cilove_pole[0]) == abs(figurka["pozice"][1] - cilove_pole[1]): #Kontrola úhlopříčně (diagonálně)
+        if abs(figurka["pozice"][0] - cilove_pole[0]) == abs(figurka["pozice"][1] - cilove_pole[1]): #kontrola úhlopříčně (diagonálně)
             condition3 = True
             min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
             min1, max1 = sorted([cilove_pole[1], figurka["pozice"][1]])
@@ -42,7 +42,7 @@ def je_tah_mozny(figurka, cilove_pole, obsazene_pozice):
 
     #Věž
     elif figurka["typ"] == "věž":
-        # Kontrola vertiálního pohybu
+        # kontrola vertiálního pohybu
         if cilove_pole[0] == figurka["pozice"][0]:
             condition3 = True
             min0, max0 = sorted([cilove_pole[1], figurka["pozice"][1]])
@@ -50,7 +50,7 @@ def je_tah_mozny(figurka, cilove_pole, obsazene_pozice):
                 if (cilove_pole[0], i) in obsazene_pozice:
                     condition4 = False
 
-        # Kontrola horizontálního pohybu
+        # kontrola horizontálního pohybu
         elif cilove_pole[1] == figurka["pozice"][1]:
             condition3 = True
             min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
@@ -68,21 +68,21 @@ def je_tah_mozny(figurka, cilove_pole, obsazene_pozice):
 
     #královna 
     elif figurka["typ"] == "dáma": 
-        if cilove_pole[0] == figurka["pozice"][0]: #Kontrola sloupec (vertikálně)
+        if cilove_pole[0] == figurka["pozice"][0]: #kontrola sloupec (vertikálně)
             condition3 = True
             min0, max0 = sorted([cilove_pole[1], figurka["pozice"][1]])
             for i in range(min0 + 1, max0):
                 if (cilove_pole[0], i) in obsazene_pozice:
                     condition4 = False
 
-        elif cilove_pole[1] == figurka["pozice"][1]: #Kontrola řádek (horizontálně)
+        elif cilove_pole[1] == figurka["pozice"][1]: #kontrola řádek (horizontálně)
             condition3 = True
             min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
             for i in range(min0 + 1, max0):
                 if (i, cilove_pole[1]) in obsazene_pozice:
                     condition4 = False
 
-        elif abs(figurka["pozice"][0] - cilove_pole[0]) == abs(figurka["pozice"][1] - cilove_pole[1]): #Kontrola úhlopříčně (diagonálně)
+        elif abs(figurka["pozice"][0] - cilove_pole[0]) == abs(figurka["pozice"][1] - cilove_pole[1]): #kontrola úhlopříčně (diagonálně)
             condition3 = True
             min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
             min1, max1 = sorted([cilove_pole[1], figurka["pozice"][1]])
@@ -95,7 +95,7 @@ def je_tah_mozny(figurka, cilove_pole, obsazene_pozice):
 
     #Král 
     elif figurka["typ"] == "král":
-        #Kontrola sloupec (vertikálně)
+        #kontrola sloupec (vertikálně)
         if cilove_pole[0] == figurka["pozice"][0] and abs(cilove_pole[0] - figurka["pozice"][0] <= 1):
             condition3 = True
             min0, max0 = sorted([cilove_pole[1], figurka["pozice"][1]])
@@ -103,7 +103,7 @@ def je_tah_mozny(figurka, cilove_pole, obsazene_pozice):
                 if (cilove_pole[0], i) in obsazene_pozice:
                     condition4 = False
 
-        #Kontrola řádek (horizontálně)
+        #kontrola řádek (horizontálně)
         elif cilove_pole[1] == figurka["pozice"][1] and abs(cilove_pole[0] - figurka["pozice"][0] <= 1):
             condition3 = True
             min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
@@ -111,7 +111,7 @@ def je_tah_mozny(figurka, cilove_pole, obsazene_pozice):
                 if (i, cilove_pole[1]) in obsazene_pozice:
                     condition4 = False
 
-        #Kontrola úhlopříčně (diagonálně)
+        #kontrola úhlopříčně (diagonálně)
         if abs(cilove_pole[0] - figurka["pozice"][0]) <= 1 and abs(cilove_pole[1] - figurka["pozice"][1]) <= 1:
             condition3 = True
             min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
