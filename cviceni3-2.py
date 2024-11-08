@@ -2,7 +2,9 @@ import sys
 import csv
 
 def nacti_csv(soubor):
-    pass
+    #pass
+    with open("data.csv", "r") as file:
+    
 
 
 def spoj_data(data1, data2):
