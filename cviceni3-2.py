@@ -2,8 +2,10 @@ import sys
 import csv
 
 def nacti_csv(soubor):
-    #pass
-    with open("data.csv", "r") as file:
+    with open(soubor1 "r") as file:
+        fp = csv.reader(file)
+            for radek in reader:
+            print(radek)
     
 
 
