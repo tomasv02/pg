@@ -22,8 +22,8 @@ def je_prvocislo(cislo):
     Jak vidite v druhe polovine se dvojice opakuji, tzn. v tomto pripade staci overit delitelnost pouze do 6 (vcetne)
     """
     #29/10/2024 VRBAT - dev.
+    #08/11/2024 VRBAT - bug repair
     cislo = int(cislo)
-    global vysledek
     vysledek = False
 
     if cislo <= 1:
@@ -55,15 +55,12 @@ def vrat_prvocisla(maximum):
     """
     Funkce spocita vsechna prvocisla v rozsahu 1 az maximum a vrati je jako seznam.
     """
-    if vysledek != False: #<> nebo NE
-        return "Zadané číslo není prvočíslo"
-    else: 
-        maximum = int(maximum)
-        results = []
-        for i in range(2, maximum + 1):
-            if je_prvocislo(i):
-                results.append(i)
-        return results
+    maximum = int(maximum)
+    results = []
+    for i in range(2, maximum + 1):
+        if je_prvocislo(i):
+            results.append(i)
+    return results
 
 if __name__ == "__main__":
     cislo = input("Zadej maximum: ")
