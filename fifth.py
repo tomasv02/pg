@@ -14,12 +14,13 @@ def read_header(file_name, header_length):
     z něj přečte prvních header_length bytů a ty vrátí pomocí return
     """
     try:
-        with open(file_name, "rb") as file_name: #načtení prvních dvou bajtů z hlavičky bin souboru (definuje, o jaký formát se jedná)
+        with open("kitten.jpeg", "rb") as file_name: #načtení prvních dvou bajtů z hlavičky bin souboru (definuje, o jaký formát se jedná)
             header_length = file_name.read(2)
 
     except FileNotFoundError:
-        return"Soubor neexistuje"
+        print("Soubor neexistuje")
     
+    print(header_length)
     return header_length
 
 
@@ -51,6 +52,7 @@ def is_gif(file_name):
         return False
     
 
+
 def is_png(file_name):
     """
     Funkce zkusí přečíst ze souboru hlavičku obrázku jpeg,
@@ -58,7 +60,7 @@ def is_png(file_name):
     """
     # vyhodnoť zda je soubor png
     header = read_header(file_name, len(png_header))
-    if header == png_header: #vyhodnoť zda je soubor png
+    if header == png_header_header: #vyhodnoť zda je soubor png
         return True
     else:
         return False
@@ -80,5 +82,5 @@ def print_file_type(file_name):
 
 if __name__ == '__main__':
     # přidej try-catch blok, odchyť obecnou vyjímku Exception a vypiš ji
-    file_name = sys.argv[1] #přiřadí název souboru z terminálu
+    file_name = sys.argv[1]
     print_file_type(file_name)
