@@ -82,7 +82,7 @@ if __name__ == '__main__':
         print_file_type(file_name)
 
     except FileNotFoundError:
-        print(f'Soubor {sys.argv[1]} nebyl nalezen.')
+        print(f'Soubor {sys.argv[1]} nenalezen.')
 
     except Exception:
         print("Byla vyvolána výjimka")
