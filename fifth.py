@@ -7,7 +7,7 @@ gif_header1 = b'GIF87a'
 gif_header2 = b'GIF89a'
 png_header = b'\x89PNG\r\n\x1a\n'
 
-
+#28.11.2024 VRBAT - implementation
 def read_header(file_name, header_length):
     """
     Tato funkce načte binární soubor z cesty file_name,
