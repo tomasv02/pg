@@ -8,122 +8,102 @@ def je_tah_mozny(figurka, cilove_pole, obsazene_pozice):
     """
     #03.11.2024 VRBAT - implementation
 
-    #vstupní podmínky
-    condition1 = 1 <= cilove_pole[0] <= 8 and 1 <= cilove_pole[1] <= 8
-    condition2 = cilove_pole not in obsazene_pozice
-    condition3 = True
-    condition4 = True
+    def je_na_sachovnici(pozice):
+        return 1 <= pozice[0] <= 8 and 1 <= pozice[1] <= 8
 
-    #Pěšák
-    if figurka["typ"] == "pěšec":  
-        if figurka["pozice"][0] == 2:
-            l_value = 2
+    def je_volna(pozice):
+        return pozice not in obsazene_pozice
+
+    def je_cesta_volna(start, konec, smer):
+        # Generuje všechny pozice mezi start a konec a kontroluje, zda jsou volné
+        radek_smer, sloupec_smer = smer
+        pozice = (start[0] + radek_smer, start[1] + sloupec_smer)
+        while pozice != konec:
+            if pozice in obsazene_pozice:
+                return False
+            pozice = (pozice[0] + radek_smer, pozice[1] + sloupec_smer)
+        return True
+
+    typ = figurka["typ"]
+    start_pozice = figurka["pozice"]
+
+    # Ověření, že cílová pozice je na šachovnici
+    if not je_na_sachovnici(cilove_pole):
+        return False
+
+    # Pěšec
+    if typ == "pěšec":
+        smer = 1  # Pěšec se pohybuje směrem "nahoru" (větší čísla řádků)
+        start_radek, start_sloupec = start_pozice
+        cil_radek, cil_sloupec = cilove_pole
+        if start_sloupec == cil_sloupec:
+            if cil_radek == start_radek + smer and je_volna(cilove_pole):
+                return True
+            if (
+                start_radek == 2 and  # Pěšec na výchozí pozici
+                cil_radek == start_radek + 2 * smer and
+                je_volna((start_radek + 1 * smer, start_sloupec)) and
+                je_volna(cilove_pole)
+            ):
+                return True
+        return False
+
+    # Jezdec
+    if typ == "jezdec":
+        rozdil_radku = abs(cilove_pole[0] - start_pozice[0])
+        rozdil_sloupce = abs(cilove_pole[1] - start_pozice[1])
+        if (rozdil_radku, rozdil_sloupce) in [(2, 1), (1, 2)]:
+            return je_volna(cilove_pole)
+        return False
+
+    # Věž
+    if typ == "věž":
+        if start_pozice[0] == cilove_pole[0]:  # Pohyb horizontálně
+            smer = (0, 1 if cilove_pole[1] > start_pozice[1] else -1)
+        elif start_pozice[1] == cilove_pole[1]:  # Pohyb vertikálně
+            smer = (1 if cilove_pole[0] > start_pozice[0] else -1, 0)
         else:
-            l_value = 1
-        condition3 = figurka["pozice"][0] < cilove_pole[0] <= figurka["pozice"][0] + l_value
+            return False
+        return je_cesta_volna(start_pozice, cilove_pole, smer) and je_volna(cilove_pole)
 
-        min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
-        for i in range(min0 + 1, max0):
-            if (i, cilove_pole[1]) in obsazene_pozice:
-                condition4 = False
+    # Střelec
+    if typ == "střelec":
+        rozdil_radku = abs(cilove_pole[0] - start_pozice[0])
+        rozdil_sloupce = abs(cilove_pole[1] - start_pozice[1])
+        if rozdil_radku == rozdil_sloupce:  # Pohyb diagonálně
+            smer = (
+                1 if cilove_pole[0] > start_pozice[0] else -1,
+                1 if cilove_pole[1] > start_pozice[1] else -1,
+            )
+            return je_cesta_volna(start_pozice, cilove_pole, smer) and je_volna(cilove_pole)
+        return False
 
-    #Střelec
-    elif figurka["typ"] == "střelec": 
-        if abs(figurka["pozice"][0] - cilove_pole[0]) == abs(figurka["pozice"][1] - cilove_pole[1]): #kontrola úhlopříčně (diagonálně)
-            condition3 = True
-            min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
-            min1, max1 = sorted([cilove_pole[1], figurka["pozice"][1]])
-            for i, j in zip(range(min0 + 1, max0), range(min1 + 1, max1)):
-                if (i, j) in obsazene_pozice:
-                    condition4 = False
+    # Dáma
+    if typ == "dáma":
+        if start_pozice[0] == cilove_pole[0] or start_pozice[1] == cilove_pole[1]:  # Horizontálně/vertikálně
+            smer = (
+                (0, 1 if cilove_pole[1] > start_pozice[1] else -1)
+                if start_pozice[0] == cilove_pole[0]
+                else (1 if cilove_pole[0] > start_pozice[0] else -1, 0)
+            )
+            return je_cesta_volna(start_pozice, cilove_pole, smer) and je_volna(cilove_pole)
+        elif abs(cilove_pole[0] - start_pozice[0]) == abs(cilove_pole[1] - start_pozice[1]):  # Diagonálně
+            smer = (
+                1 if cilove_pole[0] > start_pozice[0] else -1,
+                1 if cilove_pole[1] > start_pozice[1] else -1,
+            )
+            return je_cesta_volna(start_pozice, cilove_pole, smer) and je_volna(cilove_pole)
+        return False
 
-        else:
-            condition3 = False
+    # Král
+    if typ == "král":
+        rozdil_radku = abs(cilove_pole[0] - start_pozice[0])
+        rozdil_sloupce = abs(cilove_pole[1] - start_pozice[1])
+        if max(rozdil_radku, rozdil_sloupce) == 1:
+            return je_volna(cilove_pole)
+        return False
 
-    #Věž
-    elif figurka["typ"] == "věž":
-        # kontrola vertiálního pohybu
-        if cilove_pole[0] == figurka["pozice"][0]:
-            condition3 = True
-            min0, max0 = sorted([cilove_pole[1], figurka["pozice"][1]])
-            for i in range(min0 + 1, max0):
-                if (cilove_pole[0], i) in obsazene_pozice:
-                    condition4 = False
-
-        # kontrola horizontálního pohybu
-        elif cilove_pole[1] == figurka["pozice"][1]:
-            condition3 = True
-            min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
-            for i in range(min0 + 1, max0):
-                if (i, cilove_pole[1]) in obsazene_pozice:
-                    condition4 = False
-        else:
-            condition3 = False
-
-    #kůň 
-    elif figurka["typ"] == "jezdec":
-        osa1 = abs(cilove_pole[0] - figurka["pozice"][0])
-        osa2 = abs(cilove_pole[1] - figurka["pozice"][1])
-        condition3 = (osa1 == 2 and osa2 == 1) or (osa1 == 1 and osa2 == 2)
-
-    #královna 
-    elif figurka["typ"] == "dáma": 
-        if cilove_pole[0] == figurka["pozice"][0]: #kontrola sloupec (vertikálně)
-            condition3 = True
-            min0, max0 = sorted([cilove_pole[1], figurka["pozice"][1]])
-            for i in range(min0 + 1, max0):
-                if (cilove_pole[0], i) in obsazene_pozice:
-                    condition4 = False
-
-        elif cilove_pole[1] == figurka["pozice"][1]: #kontrola řádek (horizontálně)
-            condition3 = True
-            min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
-            for i in range(min0 + 1, max0):
-                if (i, cilove_pole[1]) in obsazene_pozice:
-                    condition4 = False
-
-        elif abs(figurka["pozice"][0] - cilove_pole[0]) == abs(figurka["pozice"][1] - cilove_pole[1]): #kontrola úhlopříčně (diagonálně)
-            condition3 = True
-            min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
-            min1, max1 = sorted([cilove_pole[1], figurka["pozice"][1]])
-            for i, j in zip(range(min0 + 1, max0), range(min1 + 1, max1)):
-                if (i, j) in obsazene_pozice:
-                    condition4 = False
-        else:
-            condition3 = False
-
-    #král 
-    elif figurka["typ"] == "král":
-        #kontrola sloupec (vertikálně)
-        if cilove_pole[0] == figurka["pozice"][0] and abs(cilove_pole[0] - figurka["pozice"][0] <= 1):
-            condition3 = True
-            min0, max0 = sorted([cilove_pole[1], figurka["pozice"][1]])
-            for i in range(min0 + 1, max0):
-                if (cilove_pole[0], i) in obsazene_pozice:
-                    condition4 = False
-
-        #kontrola řádek (horizontálně)
-        elif cilove_pole[1] == figurka["pozice"][1] and abs(cilove_pole[0] - figurka["pozice"][0] <= 1):
-            condition3 = True
-            min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
-            for i in range(min0 + 1, max0):
-                if (i, cilove_pole[1]) in obsazene_pozice:
-                    condition4 = False
-
-        #kontrola úhlopříčně (diagonálně)
-        if abs(cilove_pole[0] - figurka["pozice"][0]) <= 1 and abs(cilove_pole[1] - figurka["pozice"][1]) <= 1:
-            condition3 = True
-            min0, max0 = sorted([cilove_pole[0], figurka["pozice"][0]])
-            min1, max1 = sorted([cilove_pole[1], figurka["pozice"][1]])
-            for i, j in zip(range(min0 + 1, max0), range(min1 + 1, max1)):
-                if (i, j) in obsazene_pozice:
-                    condition4 = False
-
-        else:
-            condition3 = False
-
-    #výsledek
-    return f"Tah {figurka["7p"]} z pole {figurka["pozice"]} na pole {cilove_pole} je {condition1 and condition2 and condition3 and condition4}"
+    return False
 
 # Test fce; # = výsledky (ze zadání)
 if __name__ == "__main__":
