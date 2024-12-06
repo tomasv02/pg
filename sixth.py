@@ -1,6 +1,7 @@
 import sys
 import requests
 from lxml import html
+from unittest.mock import MagicMock
 
 #12/06/2024 VRBAT
 def download_url_and_get_all_hrefs(url):
@@ -18,6 +19,15 @@ def download_url_and_get_all_hrefs(url):
     root = html.fromstring(response.content)
 
     return[href for href in root.xpath('//a/@href') if href.startswith('http')]
+
+#pokus o test, není součástí úkolu č.6
+#class TestResponse:
+#    def __init__(self, content):
+#        self.ok = True
+#        self.content = content
+
+#def test_download_url_and_get_all_hrefs():
+#    assert download_url_and_get_all_hrefs("https://python.cz") == []
 
 if __name__ == "__main__":
     try:
