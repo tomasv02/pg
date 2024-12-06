@@ -2,7 +2,7 @@ import sys
 import requests
 from lxml import html
 
-#12/6/2024 VRBAT
+#12/06/2024 VRBAT
 def download_url_and_get_all_hrefs(url):
     """
     Funkce stahne url predanou v parametru url pomoci volani response = requests.get(),
@@ -16,10 +16,8 @@ def download_url_and_get_all_hrefs(url):
         return []
     
     root = html.fromstring(response.content)
-    hrefs = [href for href in root.xpath('//a/@href') if href.startswith('http')]
 
-    return hrefs
-
+    return[href for href in root.xpath('//a/@href') if href.startswith('http')]
 
 if __name__ == "__main__":
     try:
@@ -32,5 +30,3 @@ if __name__ == "__main__":
     # osetrete potencialni chyby pomoci vetve except
     except Exception as e:
         print(f"Program skoncil chybou: {e}")
-
-if __name__ == '__main__':
