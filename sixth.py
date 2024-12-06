@@ -4,6 +4,7 @@ from lxml import html
 from unittest.mock import MagicMock
 
 #12/06/2024 VRBAT
+#jak otestovat: do terminálu zada: /home/codespace/.python/current/bin/python /workspaces/pg/sixth.py https://www.seznam.cz/
 def download_url_and_get_all_hrefs(url):
     """
     Funkce stahne url predanou v parametru url pomoci volani response = requests.get(),
