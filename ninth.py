@@ -1,29 +1,17 @@
-def dec_to_bin2(cislo):
-    # funkce prevede cislo na binarni reprezentaci (cislo muze byt str i int!!!)
-    # 7 -> "111"
-    # 5 -> "101"
-    cislo = int(cislo)
-    if cislo == 0:
-        return "0"
-    vysledek = ""
-    while cislo > 0:
-        if cislo % 2 == 0:
-            vysledek += "0"
-        else:
-            vysledek = str(cislo % 2) + vysledek 
-        cislo = cislo // 2
-
-    return vysledek
+  #10/12/2024 VRBAT - implementation - převod dec na bin
 
 def dec_to_bin(cislo):
     cislo = int(cislo)
-    if cislo == 0:
+    if cislo < 0:
+        return "-" + dec_to_bin(-cislo)  # Zpracování záporných čísel
+    elif cislo == 0:
         return "0"
-    elif cislo == 1:
-        return "1"
     else:
-        return dec_to_bin(cislo // 2) + str(cislo % 2)
-
+        bin_cislo = ""
+        while cislo > 0:
+            bin_cislo = str(cislo % 2) + bin_cislo
+            cislo //= 2
+        return bin_cislo # záznam z debuggingu: výstup fce dec_to_bin: 10100111
 
 def test_bin_to_dec():
     assert dec_to_bin("0") == "0"
@@ -33,6 +21,6 @@ def test_bin_to_dec():
     assert dec_to_bin(127) == "1111111"
     assert dec_to_bin("128") == "10000000"
 
-
 if __name__ == "__main__":
-    dec_to_bin(120)
+    dec_to_bin(167) #vstup, v zadání je číslo 167
+  
