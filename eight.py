@@ -11,7 +11,7 @@ def bin_to_dec(binarni_cislo):
         if cislo == "1":
             vysledek += hodnota_bitu
         hodnota_bitu *= 2
-    print(vysledek)
+    return vysledek #zaznam z debuggeru: lokální proměnná - vysledek = 157
 
 
 def test_bin_to_dec():
