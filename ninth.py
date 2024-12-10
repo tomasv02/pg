@@ -11,7 +11,7 @@ def dec_to_bin(cislo):
         while cislo > 0:
             bin_cislo = str(cislo % 2) + bin_cislo
             cislo //= 2
-        return bin_cislo # záznam z debuggingu: výstup fce dec_to_bin: 10100111
+        return bin_cislo # záznam z debuggeru: výstup fce dec_to_bin: 10100111
 
 def test_bin_to_dec():
     assert dec_to_bin("0") == "0"
