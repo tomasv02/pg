@@ -26,6 +26,7 @@ user_names = {
 }
 
 def fetch_and_save_data():
+
     # Načteme data z URL
     response = requests.get(url)
     
