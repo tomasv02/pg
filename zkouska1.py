@@ -5,7 +5,7 @@
 # Pokud seznam obsahuje číslo 10, ukončete zpracování seznamu a vraťte dosud vytvořený seznam.
 
 # 13/12/2024 VRBAT
-
+#pokud je číslo větší než 10, ukončí loop pro daný seznam 
 def process_numbers(numbers):
     result = []  # Výsledný seznam
     for num in numbers:
