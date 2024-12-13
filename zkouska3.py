@@ -37,7 +37,7 @@ from unittest.mock import patch, MagicMock, mock_open
 
 # Pytest testy pro Příklad 3
 def test_shapes():
-    rect = Rectangle(4, 5)
+    rect = Rectangle(4, 5) #vytvoření instance pro test
     assert rect.area() == 20
 
     circle = Circle(3)
