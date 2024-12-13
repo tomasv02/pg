@@ -10,7 +10,7 @@
 
 from abc import ABC, abstractmethod
 
-class Shape(ABC):
+class Shape(ABC): #nemůže být inicializována, slouží jako základna
     @abstractmethod
     def area(self):
         pass
