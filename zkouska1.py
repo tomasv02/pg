@@ -7,8 +7,13 @@
 # 13/12/2024 VRBAT
 
 def process_numbers(numbers):
-    # ZDE NAPIŠTE VÁŠ KÓD
-    pass
+   result = []  # Výsledný seznam
+    for num in numbers:
+        if num == 10:  # Pokud je číslo 10, ukončíme zpracování
+            break
+        if num > 5:  # Pokud je číslo větší než 5
+            result.append(num * 2)  # Vynásobíme číslo 2 a přidáme do výsledku
+    return result
 
 # Pytest testy pro Příklad 1
 def test_process_numbers():
