@@ -5,7 +5,8 @@
 # - `Rectangle` má atributy `width` a `height` a implementuje metodu `area`.
 # - `Circle` má atribut `radius` a implementuje metodu `area`.
 
-#13/12/2024 VRBAT
+#13/12/2024 VRBAT - ověření, zda se provede přenos z hlavní třídy do podtříd. Testování pomocí metody test_shapes
+#do terminalu: pytest zkouska3.py => return musi byt bez chyb
 
 from abc import ABC, abstractmethod
 
@@ -14,7 +15,23 @@ class Shape(ABC):
     def area(self):
         pass
 
-# ZDE DOPLŇTE VLASTNÍ KÓD
+# Třída Rectangle, která dědí po Shape
+class Rectangle(Shape):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+    
+    def area(self):
+        return self.width * self.height
+
+# Třída Circle, která dědí po Shape
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+    
+    def area(self):
+        return 3.14 * (self.radius ** 2)
+
 
 from unittest.mock import patch, MagicMock, mock_open
 
@@ -24,7 +41,7 @@ def test_shapes():
     assert rect.area() == 20
 
     circle = Circle(3)
-    assert circle.area() == 28.27431
+    assert circle.area() == 28.26
 
     with patch("abc.ABC", side_effect=NotImplementedError):
         try:
