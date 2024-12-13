@@ -27,19 +27,15 @@ user_names = {
 
 def fetch_and_save_data():
 
-    # Načteme data z URL
     response = requests.get(url)
-    
-    # Pokud je odpověď úspěšná, pokračujeme
+   
     if response.ok:
         data = response.json()
 
-        # Přidáme userName pro každý příspěvek
         for post in data:
             user_id = post.get('userId')
             post['userName'] = user_names.get(user_id, "Unknown User")
 
-        # Uložíme upravená data do souboru data.json
         with open('data.json', 'w') as f:
             json.dump(data, f, indent=4)
         
