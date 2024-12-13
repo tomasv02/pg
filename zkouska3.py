@@ -10,12 +10,11 @@
 
 from abc import ABC, abstractmethod
 
-class Shape(ABC): #nemůže být inicializována, slouží jako základna
+class Shape(ABC): 
     @abstractmethod
     def area(self):
         pass
 
-# Třída Rectangle, která dědí po Shape
 class Rectangle(Shape):
     def __init__(self, width, height):
         self.width = width
@@ -24,7 +23,6 @@ class Rectangle(Shape):
     def area(self):
         return self.width * self.height
 
-# Třída Circle, která dědí po Shape
 class Circle(Shape):
     def __init__(self, radius):
         self.radius = radius
