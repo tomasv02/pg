@@ -5,14 +5,13 @@
 # Pokud seznam obsahuje číslo 10, ukončete zpracování seznamu a vraťte dosud vytvořený seznam.
 
 # 13/12/2024 VRBAT
-#pokud je číslo větší než 10, ukončí loop pro daný seznam 
 def process_numbers(numbers):
-    result = []  # Výsledný seznam
+    result = []  #
     for num in numbers:
-        if num == 10:  # Pokud je číslo 10, ukončíme zpracování
+        if num == 10:  
             break
-        if num > 5:  # Pokud je číslo větší než 5
-            result.append(num * 2)  # Vynásobíme číslo 2 a přidáme do výsledku
+        if num > 5: 
+            result.append(num * 2)  
     return result
 
 # Pytest testy pro Příklad 1
