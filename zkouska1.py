@@ -7,7 +7,7 @@
 # 13/12/2024 VRBAT
 
 def process_numbers(numbers):
-   result = []  # Výsledný seznam
+    result = []  # Výsledný seznam
     for num in numbers:
         if num == 10:  # Pokud je číslo 10, ukončíme zpracování
             break
