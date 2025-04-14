@@ -1,0 +1,6 @@
+#dokumentace k projektu print_invoice
+#13.04.2025 VRBAT
+
+bash taháky:
+1) cd /workspaces/pg/print_invoice
+2) python manage.py runserver
