@@ -1,6 +1,10 @@
 #dokumentace k projektu print_invoice
 #13.04.2025 VRBAT
 
+Měnová konverze cnb: 
+https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt?date=10.03.2025
+- programově měnit datum "10.03.2025" dle dat v tabulce
+
 bash taháky:
 1) cd /workspaces/pg/print_invoice
 2) python manage.py runserver
