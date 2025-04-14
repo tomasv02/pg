@@ -17,7 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from . import views #zavolání html views
+from . import views #14/04/2025 VRBAT - zavolání html views
 
 urlpatterns = [
     path("admin/", admin.site.urls),

@@ -13,3 +13,6 @@ bash taháky:
     source .venv/bin/activate            #aktivace virtuálního prostředí
     (.venv) @tomasv02 ➜ /workspaces/pg/print_invoice (main) $    #pokud je bash takhle tak můžu dát jen "deactivate" a virtualizace se ukončí
     python manage.py runserver           #spustí server, kde běží projekt
+    ctrl+c, ctrl+d                       #ukončí v bash příkaz a jedeš znovu
+    cat /etc/os-release                  #vypíše verzi sys na kterém pracuji
+    name -s                              #vypíše název sys                
