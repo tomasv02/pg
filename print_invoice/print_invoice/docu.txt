@@ -6,8 +6,9 @@ https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-dev
 - programově měnit datum "10.03.2025" dle dat v tabulce
 
 po spusteni: 
-    source .venv/bin/activate
-    python manage.py runserver    
+    source /workspaces/pg/print_invoice/venv/bin/activate
+    python manage.py runserver
+    pip install django-import-export    
 
 Superuser pro admina: 
 pristup do adm: http://127.0.0.1:8000/admin/ (dat /admin za odkaz)
