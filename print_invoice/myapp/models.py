@@ -39,3 +39,17 @@ class delivery_header(models.Model):
 
     def __str__(self):
         return f"{self.delivery_number} – {self.customer}"    
+
+class customers(models.Model):
+    customer_code = models.CharField(max_length=5)
+    customer_text = models.CharField(max_length=60)  # Název zákazníka nebo popis
+    customer_ico = models.CharField(max_length=20)  # IČO
+    customer_street = models.CharField(max_length=128)
+    customer_cp = models.CharField(max_length=20)  # Číslo popisné
+    customer_zip = models.CharField(max_length=10)
+    customer_city = models.CharField(max_length=60)
+    customer_email = models.CharField(max_length=60)
+    customer_phone = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f"{self.customer_code} – {self.customer_text}"
