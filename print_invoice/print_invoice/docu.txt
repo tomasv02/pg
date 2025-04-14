@@ -35,4 +35,5 @@ bash taháky:
     python manage.py startapp myapp      #založení aplikace
     python manage.py makemigrations myapp  #vytvoření migrace
     python manage.py migrate             #migrování dat
+    pip install django-import-export     #do admina instalace možnosti importu a exportu dat z excelu
 

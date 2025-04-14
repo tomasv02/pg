@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'myapp', #14.04.2025 VRBAT - přidání databáze
+    'import_export', #14.04.2025 VRBAT - import data z xlsx
 ]
 
 MIDDLEWARE = [
