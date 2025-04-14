@@ -18,7 +18,7 @@ pristup do adm: http://127.0.0.1:8000/admin/ (dat /admin za odkaz)
         Password: admin
 
 po kazdy zmene databaze: 
-    python manage.py makemigrations myapp  #vytvoření migrace
+    python manage.py makemigrations        #vytvoření migrace
     python manage.py migrate               #migrování dat
 
 
