@@ -6,5 +6,10 @@ https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-dev
 - programově měnit datum "10.03.2025" dle dat v tabulce
 
 bash taháky:
-1) cd /workspaces/pg/print_invoice
-2) python manage.py runserver
+    pip show django                      #ukáže zda django je nainstalované
+    pip install django                   #instalace django
+    cd /workspaces/pg/print_invoice      #cesta do složky
+    python -m venv .venv                 #nastartuje virtuální prostředí
+    source .venv/bin/activate            #aktivace virtuálního prostředí
+    (.venv) @tomasv02 ➜ /workspaces/pg/print_invoice (main) $    #pokud je bash takhle tak můžu dát jen "deactivate" a virtualizace se ukončí
+    python manage.py runserver           #spustí server, kde běží projekt
