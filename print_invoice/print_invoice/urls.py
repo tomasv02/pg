@@ -22,5 +22,5 @@ from . import views #zavolání html views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', views.homepage), #první stránka
-    path('about/', views.about), #podstránka
+    path('', views.print), #podstránka
 ]

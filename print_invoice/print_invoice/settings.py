@@ -54,7 +54,7 @@ ROOT_URLCONF = "print_invoice.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ['templates'], #django spojení s html templates
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

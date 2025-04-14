@@ -1,7 +1,7 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 def homepage(request):
-    return HttpResponse("Test lorem ipsum")
+    return render(request, 'main.html') #zavolá main html stranku
 
-def about(request):
-    return HttpResponse("2Test lorem ipsum2")
+def print(request):
+    return render(request, 'print.html') #volání podstranky print
