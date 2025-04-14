@@ -5,6 +5,22 @@ Měnová konverze cnb:
 https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt?date=10.03.2025
 - programově měnit datum "10.03.2025" dle dat v tabulce
 
+po spusteni: 
+    source .venv/bin/activate
+    python manage.py runserver    
+
+Superuser pro admina: 
+pristup do adm: http://127.0.0.1:8000/admin/ (dat /admin za odkaz)
+    (.venv) @tomasv02 ➜ /workspaces/pg/print_invoice (main) $ python manage.py createsuperuser
+        Username: vrbato02
+        Email address: vrbato02@jcu.cz
+        Password: admin
+
+po kazdy zmene databaze: 
+    python manage.py makemigrations myapp  #vytvoření migrace
+    python manage.py migrate               #migrování dat
+
+
 bash taháky:
     pip show django                      #ukáže zda django je nainstalované
     pip install django                   #instalace django
@@ -15,4 +31,8 @@ bash taháky:
     python manage.py runserver           #spustí server, kde běží projekt
     ctrl+c, ctrl+d                       #ukončí v bash příkaz a jedeš znovu
     cat /etc/os-release                  #vypíše verzi sys na kterém pracuji
-    name -s                              #vypíše název sys                
+    name -s                              #vypíše název sys    
+    python manage.py startapp myapp      #založení aplikace
+    python manage.py makemigrations myapp  #vytvoření migrace
+    python manage.py migrate             #migrování dat
+
