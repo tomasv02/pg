@@ -63,17 +63,25 @@ class CustomersListView(ListView):
 class DeliveryItemListView(ListView):
     model = DeliveryItem
     template_name = 'report_items.html'  # Šablona, která bude použita
-    context_object_name = 'delivery_items'  # Název proměnné, která bude obsahovat seznam položek
-
+    context_object_name = 'items'  # Název proměnné, která bude obsahovat seznam položek
+    
     def get_queryset(self):
         queryset = DeliveryItem.objects.all()
 
-        # Filtry podle hodnot z GET requestu
+        # Filtry podle hodnot z GET requestu pro všechna pole
         delivery_number = self.request.GET.get('delivery_number')
         delivery_item = self.request.GET.get('delivery_item')
         material = self.request.GET.get('material')
         material_text = self.request.GET.get('material_text')
+        delivered_qty = self.request.GET.get('delivered_qty')
+        delivered_qty_unit = self.request.GET.get('delivered_qty_unit')
+        price_unit_no_dph = self.request.GET.get('price_unit_no_dph')
+        price_unit_currency = self.request.GET.get('price_unit_currency')
+        delivery_item_created_on = self.request.GET.get('delivery_item_created_on')
+        delivery_item_created_at = self.request.GET.get('delivery_item_created_at')
+        delivery_item_created_by = self.request.GET.get('delivery_item_created_by')
 
+        # Aplikování filtrů podle GET parametrů
         if delivery_number:
             queryset = queryset.filter(delivery_number__icontains=delivery_number)
         if delivery_item:
@@ -82,6 +90,17 @@ class DeliveryItemListView(ListView):
             queryset = queryset.filter(material__icontains=material)
         if material_text:
             queryset = queryset.filter(material_text__icontains=material_text)
+        if delivered_qty:
+            queryset = queryset.filter(delivered_qty__icontains=delivered_qty)
+        if price_unit_no_dph:
+            queryset = queryset.filter(price_unit_no_dph__icontains=price_unit_no_dph)
+        if delivery_item_created_on:
+            queryset = queryset.filter(delivery_item_created_on__icontains=delivery_item_created_on)
+        if delivery_item_created_at:
+            queryset = queryset.filter(delivery_item_created_at__icontains=delivery_item_created_at)
+        if delivery_item_created_by:
+            queryset = queryset.filter(delivery_item_created_by__icontains=delivery_item_created_by)
 
         return queryset
+
     

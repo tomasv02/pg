@@ -17,15 +17,7 @@
         <input type="text" name="material" placeholder="materiál" value="{{ request.GET.material }}">
         <input type="text" name="material_text" placeholder="text materiálu" value="{{ request.GET.material_text }}">
         <input type="text" name="delivered_qty" placeholder="dodaný počet" value="{{ request.GET.delivered_qty }}">
-        <input type="text" name="delivered_qty_unit" placeholder="jednotka" value="{{ request.GET.delivered_qty_unit }}">
         <input type="text" name="price_unit_no_dph" placeholder="cena bez DPH" value="{{ request.GET.price_unit_no_dph }}">
-        <select name="price_unit_currency" id="price_unit_currency">
-            <option value="">--Vyberte měnu--</option>
-            <option value="USD" {% if request.GET.price_unit_currency == 'USD' %}selected{% endif %}>USD</option>
-            <option value="EUR" {% if request.GET.price_unit_currency == 'EUR' %}selected{% endif %}>EUR</option>
-            <option value="CZK" {% if request.GET.price_unit_currency == 'CZK' %}selected{% endif %}>CZK</option>
-            <option value="GBP" {% if request.GET.price_unit_currency == 'GBP' %}selected{% endif %}>GBP</option>
-        </select>
         <input type="text" name="delivery_item_created_by" placeholder="založil" value="{{ request.GET.delivery_item_created_by }}">
         <button type="submit">Filtrovat</button>
         <!-- Tlačítko pro reset -->
