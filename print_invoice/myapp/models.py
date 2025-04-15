@@ -9,7 +9,7 @@ from django.db import models
 
 from django.db import models
 
-class delivery_item(models.Model):
+class DeliveryItem(models.Model):
     delivery_number = models.CharField(max_length=20)  # NEunikátní
     delivery_item = models.CharField(max_length=4)
     material = models.CharField(max_length=5)
@@ -25,8 +25,7 @@ class delivery_item(models.Model):
     def __str__(self):
         return f"Delivery {self.delivery_number} - {self.delivery_item}"
 
-
-class delivery_header(models.Model):
+class DeliveryHeader(models.Model):
     delivery_number = models.CharField(max_length=20)
     delivery_type = models.CharField(max_length=2)
     invoice_number = models.IntegerField(default=0)  
@@ -38,10 +37,10 @@ class delivery_header(models.Model):
     delivery_created_at = models.CharField(max_length=20)
     delivery_created_by = models.CharField(max_length=12)
 
-    def __str__(self):
-        return f"{self.delivery_number} – {self.customer}"    
+def __str__(self):
+    return f"{self.delivery_number} – {self.customer}"    
 
-class customers(models.Model):
+class Customers(models.Model):
     customer_code = models.CharField(max_length=5)
     customer_text = models.CharField(max_length=60)  # Název zákazníka nebo popis
     customer_ico = models.CharField(max_length=20)  # IČO

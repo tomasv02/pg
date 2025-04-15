@@ -1,14 +1,63 @@
-<!DOCTYPE html>
-{% load static %} <!-- 14.04.2025 VRBAT - spojení css s html-->
+<!-- <!DOCTYPE html>
+{% load static %}  14.04.2025 VRBAT - spojení css s html
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEST print</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- 14.04.2025 VRBAT - spojení css s html-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">  14.04.2025 VRBAT - spojení css s html
 </head>
 <body>
     <h1>TEST PRINT</h1>
     <p>Get back <a href="/">Home button</a></p>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Header List</title>
+</head>
+<body>
+    <h1>Delivery Header List</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Delivery Number</th>
+                <th>Delivery Type</th>
+                <th>Invoice Number</th>
+                <th>Invoice Currency</th>
+                <th>Due Date Invoice</th>
+                <th>Customer</th>
+                <th>Delivery Date</th>
+                <th>Delivery Created On</th>
+                <th>Delivery Created At</th>
+                <th>Delivery Created By</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for header in headers %}
+            <tr>
+                <td>{{ header.delivery_number }}</td>
+                <td>{{ header.delivery_type }}</td>
+                <td>{{ header.invoice_number }}</td>
+                <td>{{ header.invoice_currency }}</td>
+                <td>{{ header.due_date_invoice }}</td>
+                <td>{{ header.customer }}</td>
+                <td>{{ header.delivery_date }}</td>
+                <td>{{ header.delivery_created_on }}</td>
+                <td>{{ header.delivery_created_at }}</td>
+                <td>{{ header.delivery_created_by }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="10">No data available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 </body>
 </html>

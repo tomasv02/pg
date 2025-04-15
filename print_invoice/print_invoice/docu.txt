@@ -21,6 +21,11 @@ po kazdy zmene databaze:
     python manage.py makemigrations        #vytvoření migrace
     python manage.py migrate               #migrování dat
 
+pouzite technologie: 
+    django framework
+    django-import-export 
+    python manage.py startapp
+    pip install django-report-builder (pip install git+https://github.com/bradleyg/django-report-builder.git - aktualizace, nekompatibilita python 5.0+)
 
 bash taháky:
     pip show django                      #ukáže zda django je nainstalované

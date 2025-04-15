@@ -18,9 +18,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views #14/04/2025 VRBAT - zavolání html views
+from myapp.views import DeliveryHeaderListView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', views.homepage), #domovská stránka
-    path('print/', views.print), #podstránka
+    path('print/', DeliveryHeaderListView.as_view(), name='delivery_header_list'), #15.04.2025 VRBAT - propojení class view a html print
 ]
