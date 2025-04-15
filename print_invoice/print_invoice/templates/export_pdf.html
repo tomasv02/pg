@@ -2,48 +2,109 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
+    <title>Faktura - Vybrané dodávky</title>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #000; padding: 6px; font-size: 12px; }
-        th { background-color: #eee; }
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 12px;
+            margin: 40px;
+            color: #333;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .company-info, .customer-info {
+            width: 45%;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #666;
+            padding: 6px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 11px;
+            color: #777;
+        }
     </style>
 </head>
 <body>
-    <h2>Vybrané položky dodávky</h2>
+    <h1>Faktura - Seznam vybraných dodávek</h1>
+
+    <div class="invoice-header">
+        <div class="company-info">
+            <strong>Dodavatel:</strong><br>
+            Firma s.r.o.<br>
+            Ulice 123<br>
+            100 00 Praha<br>
+            IČO: 12345678<br>
+            DIČ: CZ12345678<br>
+        </div>
+
+        <div class="customer-info">
+            <strong>Odběratel:</strong><br>
+            {% if customer %}
+                {{ customer.name }}<br>
+                {{ customer.address }}<br>
+                IČO: {{ customer.ico }}<br>
+                DIČ: {{ customer.dic }}<br>
+            {% else %}
+                {{ deliveries.0.customer_text }}<br>
+                Kód: {{ deliveries.0.customer_code }}
+            {% endif %}
+        </div>
+    </div>
+
     <table>
         <thead>
             <tr>
-                <th>Číslo dodávky</th>
-                <th>Číslo položky</th>
-                <th>Materiál</th>
-                <th>Text materiálu</th>
-                <th>Množství</th>
-                <th>Jednotka</th>
-                <th>Cena bez DPH</th>
-                <th>Měna</th>
-                <th>Datum</th>
-                <th>Čas</th>
+                <th>Dodávka č.</th>
+                <th>Druh</th>
+                <th>Splatnost</th>
+                <th>Datum dodání</th>
+                <th>Vytvořeno</th>
                 <th>Založil</th>
             </tr>
         </thead>
         <tbody>
-            {% for item in items %}
+            {% for d in deliveries %}
             <tr>
-                <td>{{ item.delivery_number }}</td>
-                <td>{{ item.delivery_item }}</td>
-                <td>{{ item.material }}</td>
-                <td>{{ item.material_text }}</td>
-                <td>{{ item.delivered_qty }}</td>
-                <td>{{ item.delivered_qty_unit }}</td>
-                <td>{{ item.price_unit_no_dph }}</td>
-                <td>{{ item.price_unit_currency }}</td>
-                <td>{{ item.delivery_item_created_on }}</td>
-                <td>{{ item.delivery_item_created_at }}</td>
-                <td>{{ item.delivery_item_created_by }}</td>
+                <td>{{ d.delivery_number }}</td>
+                <td>{{ d.delivery_type }}</td>
+                <td>{{ d.due_date_invoice }}</td>
+                <td>{{ d.delivery_date }}</td>
+                <td>{{ d.delivery_created_on }} {{ d.delivery_created_at }}</td>
+                <td>{{ d.delivery_created_by }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <div class="footer">
+        Tisknuto automaticky z interního systému • Datum: {{ now|date:"d.m.Y H:i" }}
+    </div>
 </body>
 </html>

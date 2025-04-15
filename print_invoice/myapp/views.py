@@ -4,11 +4,13 @@ from .models import DeliveryHeader
 from .models import Customers
 from .models import DeliveryItem
 
-from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+from .models import DeliveryHeader
+from weasyprint import HTML
+from django.template.loader import render_to_string
 from django.http import HttpResponse
-from django.template.loader import get_template
-import weasyprint
-
+from django.utils import timezone
 
 #třída dodávky - hlavička  
 class DeliveryHeaderListView(ListView):
@@ -108,3 +110,16 @@ class DeliveryItemListView(ListView):
             queryset = queryset.filter(delivery_item_created_by__icontains=delivery_item_created_by)
 
         return queryset
+
+@csrf_exempt
+def export_selected_deliveries(request):
+    if request.method == "POST":
+        ids = request.POST.getlist('selected_ids')
+        deliveries = DeliveryHeader.objects.filter(id__in=ids)
+
+        html_string = render_to_string("export_pdf.html", {'deliveries': deliveries})
+        html = HTML(string=html_string)
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="nazev_dodavky.pdf"'
+        html.write_pdf(target=response)
+        return response

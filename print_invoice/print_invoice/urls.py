@@ -21,6 +21,7 @@ from . import views #14/04/2025 VRBAT - zavolání html views
 from myapp.views import DeliveryHeaderListView
 from myapp.views import CustomersListView
 from myapp.views import DeliveryItemListView
+from myapp.views import export_selected_deliveries
 
 urlpatterns = [
     path("admin/", admin.site.urls), #pristus do admin modu z homepage
@@ -28,4 +29,5 @@ urlpatterns = [
     path('print/', DeliveryHeaderListView.as_view(), name='delivery_header_list'), #15.04.2025 VRBAT - propojení class view a html print
     path('report_customers/', CustomersListView.as_view(), name='customers_list'), #15.04.2025 VRBAT - zákazníci propojení view
     path('report_items/', DeliveryItemListView.as_view(), name='delivery_item_list'),  #15.04.2025 VRBAT - Seznam položek dodávky view
+    path('export-selected/', export_selected_deliveries, name='export_selected_deliveries'),
 ]

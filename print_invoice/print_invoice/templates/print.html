@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-{% load static %}  <!--14.04.2025 VRBAT - spojení css s html-->
+{% load static %}
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seznam dodávek</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">  <!--14.04.2025 VRBAT - spojení css s html-->
-    <button class="button" onclick="window.location.href='/'">Zpět</button> <!-- 15.04.2025 VRBAT - back-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="{% static 'js/filter.js' %}"></script>
 </head>
 <body>
+    <button class="button" onclick="window.location.href='/'">Zpět</button>
     <h2>Seznam dodávek</h2>
+
+    <!-- FILTR -->
     <form method="get" class="centered-form" autocomplete="off">
         <input type="text" name="delivery_number" placeholder="číslo dodávky" value="{{ request.GET.delivery_number }}">
         <select name="delivery_type" id="delivery_type">
             <option value="">--Vyberte typ dodávky--</option>
             <option value="F1" {% if request.GET.delivery_type == 'F1' %}selected{% endif %}>F1 - e-shop</option>
-            <option value="F2" {% if request.GET.delivery_type == 'F2' %}selected{% endif %}>F2 - B2B </option>
+            <option value="F2" {% if request.GET.delivery_type == 'F2' %}selected{% endif %}>F2 - B2B</option>
             <option value="F3" {% if request.GET.delivery_type == 'F3' %}selected{% endif %}>F3 - Maloprodej</option>
         </select>
         <input type="text" name="invoice_number" placeholder="číslo faktury" value="{{ request.GET.invoice_number }}">
@@ -25,52 +27,58 @@
             <option value="USD" {% if request.GET.invoice_currency == 'USD' %}selected{% endif %}>USD</option>
             <option value="EUR" {% if request.GET.invoice_currency == 'EUR' %}selected{% endif %}>EUR</option>
             <option value="CZK" {% if request.GET.invoice_currency == 'CZK' %}selected{% endif %}>CZK</option>
-            <option value="GBP" {% if request.GET.invoice_currency == 'CZK' %}selected{% endif %}>GBP</option>
+            <option value="GBP" {% if request.GET.invoice_currency == 'GBP' %}selected{% endif %}>GBP</option>
         </select>
         <input type="text" name="customer_code" placeholder="kód zákazníka" value="{{ request.GET.customer_code }}">
         <input type="text" name="delivery_created_by" placeholder="založil" value="{{ request.GET.delivery_created_by }}">
         <button type="submit">Filtrovat</button>
-        <!-- Tlačítko pro reset -->
         <a href="{% url 'delivery_header_list' %}" class="reset-button">Zrušit filtr</a>
     </form>
-    </body>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Číslo dodávky</th>
-                <th>Druh dodávky</th>
-                <th>Číslo faktury</th>
-                <th>Měna faktury</th>
-                <th>Datum splatnosti</th>
-                <th>Kód zákazníka</th>
-                <th>Text zákazníka</th>
-                <th>Datum dodání</th>
-                <th>Dodávka vytvořena dne</th>
-                <th>Čas vytvoření</th>
-                <th>Založil</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for header in headers %}
-            <tr>
-                <td>{{ header.delivery_number }}</td>
-                <td>{{ header.delivery_type }}</td>
-                <td>{{ header.invoice_number }}</td>
-                <td>{{ header.invoice_currency }}</td>
-                <td>{{ header.due_date_invoice }}</td>
-                <td>{{ header.customer_code }}</td>
-                <td>{{ header.customer_text }}</td>
-                <td>{{ header.delivery_date }}</td>
-                <td>{{ header.delivery_created_on }}</td>
-                <td>{{ header.delivery_created_at }}</td>
-                <td>{{ header.delivery_created_by }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="10">Nebyla vybrána žádná data</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+    <!-- FORMULÁŘ PRO ODESLÁNÍ VÝBĚRU -->
+    <form method="post" action="{% url 'export_selected_deliveries' %}">
+        {% csrf_token %}
+        <button type="submit" class="button">Exportovat vybrané do PDF</button>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Vybrat</th>
+                    <th>Číslo dodávky</th>
+                    <th>Druh dodávky</th>
+                    <th>Číslo faktury</th>
+                    <th>Měna faktury</th>
+                    <th>Datum splatnosti</th>
+                    <th>Kód zákazníka</th>
+                    <th>Text zákazníka</th>
+                    <th>Datum dodání</th>
+                    <th>Dodávka vytvořena dne</th>
+                    <th>Čas vytvoření</th>
+                    <th>Založil</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for header in headers %}
+                <tr>
+                    <td><input type="checkbox" name="selected_ids" value="{{ header.id }}"></td>
+                    <td>{{ header.delivery_number }}</td>
+                    <td>{{ header.delivery_type }}</td>
+                    <td>{{ header.invoice_number }}</td>
+                    <td>{{ header.invoice_currency }}</td>
+                    <td>{{ header.due_date_invoice }}</td>
+                    <td>{{ header.customer_code }}</td>
+                    <td>{{ header.customer_text }}</td>
+                    <td>{{ header.delivery_date }}</td>
+                    <td>{{ header.delivery_created_on }}</td>
+                    <td>{{ header.delivery_created_at }}</td>
+                    <td>{{ header.delivery_created_by }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="12">Nebyla vybrána žádná data</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
 </body>
 </html>
