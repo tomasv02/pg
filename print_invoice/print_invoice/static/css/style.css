@@ -12,8 +12,8 @@ h1 {
 }
 
 table {
-    width: 95%; /* Zvýšeno na 95% */
-    max-width: 1200px; /* Zvýšeno pro širší tabulku */
+    width: 90%; /* Zvýšeno na 95% */
+    max-width: 1400px; /* Zvýšeno pro širší tabulku */
     margin: 0 auto; /* Centrované na stránce */
     border-collapse: collapse;
     background-color: #fff;
@@ -25,7 +25,7 @@ table {
 th, td {
     padding: 15px 20px; /* Zvýšený padding pro více prostoru */
     text-align: left;
-    font-size: 16px; /* Zvýšené písmo pro lepší čitelnost */
+    font-size: 13px; /* Zvýšené písmo pro lepší čitelnost */
 }
 
 thead {

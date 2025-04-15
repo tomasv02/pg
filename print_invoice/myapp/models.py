@@ -49,5 +49,11 @@ class DeliveryHeader(models.Model):
     delivery_created_at = models.CharField(max_length=20)
     delivery_created_by = models.CharField(max_length=12)
 
-def __str__(self):
-    return f"{self.delivery_number} – {self.customer}"    
+    @property #view do tabulky Customers, pro kod z hlavicky najde text v tabulce zakazniku
+    def customer_text(self):
+        from .models import Customers
+        customer = Customers.objects.filter(customer_code=self.customer_code).first()
+        return customer.customer_text if customer else "-"
+    
+    def __str__(self):
+        return f"{self.delivery_number} – {self.customer}"    

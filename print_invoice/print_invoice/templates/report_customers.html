@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seznam zákazníků</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/filter.js' %}"></script>
+</head>
+<body>
+    <button class="button" onclick="window.location.href='/'">Zpět</button>
+    <h1>Seznam zákazníků</h1>
+
+    <form method="get" class="centered-form" autocomplete="off">
+        <input type="text" name="customer_code" placeholder="Kód zákazníka" value="{{ request.GET.customer_code }}">
+        <input type="text" name="customer_text" placeholder="Název zákazníka" value="{{ request.GET.customer_text }}">
+        <input type="text" name="customer_city" placeholder="Město" value="{{ request.GET.customer_city }}">
+        <button type="submit">Filtrovat</button>
+        <a href="{% url 'customers_list' %}" class="reset-button">Zrušit filtr</a>
+    </form>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Kód</th>
+                <th>Název</th>
+                <th>IČO</th>
+                <th>Ulice</th>
+                <th>Č.p.</th>
+                <th>PSČ</th>
+                <th>Město</th>
+                <th>Email</th>
+                <th>Telefon</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.customer_code }}</td>
+                <td>{{ customer.customer_text }}</td>
+                <td>{{ customer.customer_ico }}</td>
+                <td>{{ customer.customer_street }}</td>
+                <td>{{ customer.customer_cp }}</td>
+                <td>{{ customer.customer_zip }}</td>
+                <td>{{ customer.customer_city }}</td>
+                <td>{{ customer.customer_email }}</td>
+                <td>{{ customer.customer_phone }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9">Žádní zákazníci nenalezeni</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

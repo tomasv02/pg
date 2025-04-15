@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 {% load static %}  <!--14.04.2025 VRBAT - spojení css s html-->
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery Header List</title>
+    <title>Seznam dodávek</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">  <!--14.04.2025 VRBAT - spojení css s html-->
-    <button class="button" onclick="window.location.href='admin/'">Admin mode</button> <!-- 15.04.2025 VRBAT - admin mode-->
-    <button class="button" onclick="window.location.href='/'">Home</button> <!-- 15.04.2025 VRBAT - admin mode-->
+    <button class="button" onclick="window.location.href='/'">Zpět</button> <!-- 15.04.2025 VRBAT - back-->
     <script src="{% static 'js/filter.js' %}"></script>
 </head>
 <body>
     <h1>Seznam dodávek</h1>
     <form method="get" class="centered-form" autocomplete="off">
-        <input type="text" name="delivery_number" placeholder="Delivery Number" value="{{ request.GET.delivery_number }}">
+        <input type="text" name="delivery_number" placeholder="číslo dodávky" value="{{ request.GET.delivery_number }}">
         <select name="delivery_type" id="delivery_type">
             <option value="">--Vyberte typ dodávky--</option>
             <option value="F1" {% if request.GET.delivery_type == 'F1' %}selected{% endif %}>F1 - e-shop</option>
             <option value="F2" {% if request.GET.delivery_type == 'F2' %}selected{% endif %}>F2 - B2B </option>
             <option value="F3" {% if request.GET.delivery_type == 'F3' %}selected{% endif %}>F3 - Maloprodej</option>
         </select>
-        <input type="text" name="invoice_number" placeholder="Invoice Number" value="{{ request.GET.invoice_number }}">
+        <input type="text" name="invoice_number" placeholder="číslo faktury" value="{{ request.GET.invoice_number }}">
         <select name="invoice_currency" id="invoice_currency">
             <option value="">--Vyberte měnu--</option>
             <option value="USD" {% if request.GET.invoice_currency == 'USD' %}selected{% endif %}>USD</option>
@@ -28,25 +27,28 @@
             <option value="CZK" {% if request.GET.invoice_currency == 'CZK' %}selected{% endif %}>CZK</option>
             <option value="GBP" {% if request.GET.invoice_currency == 'CZK' %}selected{% endif %}>GBP</option>
         </select>
-        <input type="text" name="customer_code" placeholder="Customer" value="{{ request.GET.customer_code }}">
-        <input type="text" name="delivery_created_by" placeholder="Delivery Created By" value="{{ request.GET.delivery_created_by }}">
+        <input type="text" name="customer_code" placeholder="kód zákazníka" value="{{ request.GET.customer_code }}">
+        <input type="text" name="delivery_created_by" placeholder="založil" value="{{ request.GET.delivery_created_by }}">
         <button type="submit">Filtrovat</button>
         <!-- Tlačítko pro reset -->
         <a href="{% url 'delivery_header_list' %}" class="reset-button">Zrušit filtr</a>
     </form>
+
+    </body>
     <table border="1">
         <thead>
             <tr>
-                <th>Delivery Number</th>
-                <th>Delivery Type</th>
-                <th>Invoice Number</th>
-                <th>Invoice Currency</th>
-                <th>Due Date Invoice</th>
-                <th>Customer</th>
-                <th>Delivery Date</th>
-                <th>Delivery Created On</th>
-                <th>Delivery Created At</th>
-                <th>Delivery Created By</th>
+                <th>Číslo dodávky</th>
+                <th>Druh dodávky</th>
+                <th>Číslo faktury</th>
+                <th>Měna faktury</th>
+                <th>Datum splatnosti</th>
+                <th>Kód zákazníka</th>
+                <th>Text zákazníka</th>
+                <th>Datum dodání</th>
+                <th>Dodávka vytvořena dne</th>
+                <th>Čas vytvoření</th>
+                <th>Založil</th>
             </tr>
         </thead>
         <tbody>
@@ -58,6 +60,7 @@
                 <td>{{ header.invoice_currency }}</td>
                 <td>{{ header.due_date_invoice }}</td>
                 <td>{{ header.customer_code }}</td>
+                <td>{{ header.customer_text }}</td>
                 <td>{{ header.delivery_date }}</td>
                 <td>{{ header.delivery_created_on }}</td>
                 <td>{{ header.delivery_created_at }}</td>
@@ -65,7 +68,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="10">No data available</td>
+                <td colspan="10">Nebyla vybrána žádná data</td>
             </tr>
             {% endfor %}
         </tbody>

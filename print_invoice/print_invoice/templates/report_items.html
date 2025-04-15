@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+{% load static %}  <!--14.04.2025 VRBAT - spojení css s html-->
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seznam položek dodávky</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">  <!--14.04.2025 VRBAT - spojení css s html-->
+    <button class="button" onclick="window.location.href='/'">Zpět</button> <!-- 15.04.2025 VRBAT - back-->
+    <script src="{% static 'js/filter.js' %}"></script>
+</head>
+<body>
+    <h1>Seznam položek dodávky</h1>
+    <form method="get" class="centered-form" autocomplete="off">
+        <input type="text" name="delivery_number" placeholder="číslo dodávky" value="{{ request.GET.delivery_number }}">
+        <input type="text" name="delivery_item" placeholder="číslo položky" value="{{ request.GET.delivery_item }}">
+        <input type="text" name="material" placeholder="materiál" value="{{ request.GET.material }}">
+        <input type="text" name="material_text" placeholder="text materiálu" value="{{ request.GET.material_text }}">
+        <input type="text" name="delivered_qty" placeholder="dodaný počet" value="{{ request.GET.delivered_qty }}">
+        <input type="text" name="delivered_qty_unit" placeholder="jednotka" value="{{ request.GET.delivered_qty_unit }}">
+        <input type="text" name="price_unit_no_dph" placeholder="cena bez DPH" value="{{ request.GET.price_unit_no_dph }}">
+        <select name="price_unit_currency" id="price_unit_currency">
+            <option value="">--Vyberte měnu--</option>
+            <option value="USD" {% if request.GET.price_unit_currency == 'USD' %}selected{% endif %}>USD</option>
+            <option value="EUR" {% if request.GET.price_unit_currency == 'EUR' %}selected{% endif %}>EUR</option>
+            <option value="CZK" {% if request.GET.price_unit_currency == 'CZK' %}selected{% endif %}>CZK</option>
+            <option value="GBP" {% if request.GET.price_unit_currency == 'GBP' %}selected{% endif %}>GBP</option>
+        </select>
+        <input type="text" name="delivery_item_created_by" placeholder="založil" value="{{ request.GET.delivery_item_created_by }}">
+        <button type="submit">Filtrovat</button>
+        <!-- Tlačítko pro reset -->
+        <a href="{% url 'delivery_item_list' %}" class="reset-button">Zrušit filtr</a>
+    </form>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Číslo dodávky</th>
+                <th>Číslo položky</th>
+                <th>Materiál</th>
+                <th>Text materiálu</th>
+                <th>Dodaná množství</th>
+                <th>Jednotka</th>
+                <th>Cena bez DPH</th>
+                <th>Měna</th>
+                <th>Datum vytvoření</th>
+                <th>Čas vytvoření</th>
+                <th>Založil</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.delivery_number }}</td>
+                <td>{{ item.delivery_item }}</td>
+                <td>{{ item.material }}</td>
+                <td>{{ item.material_text }}</td>
+                <td>{{ item.delivered_qty }}</td>
+                <td>{{ item.delivered_qty_unit }}</td>
+                <td>{{ item.price_unit_no_dph }}</td>
+                <td>{{ item.price_unit_currency }}</td>
+                <td>{{ item.delivery_item_created_on }}</td>
+                <td>{{ item.delivery_item_created_at }}</td>
+                <td>{{ item.delivery_item_created_by }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="11">Nebyla vybrána žádná data</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -19,10 +19,13 @@ from django.contrib import admin
 from django.urls import path
 from . import views #14/04/2025 VRBAT - zavolání html views
 from myapp.views import DeliveryHeaderListView
+from myapp.views import CustomersListView
+from myapp.views import DeliveryItemListView
 
 urlpatterns = [
     path("admin/", admin.site.urls), #pristus do admin modu z homepage
-    path("print/admin/", admin.site.urls), #pristu admin ze stranky print
     path('', views.homepage), #domovská stránka
     path('print/', DeliveryHeaderListView.as_view(), name='delivery_header_list'), #15.04.2025 VRBAT - propojení class view a html print
+    path('report_customers/', CustomersListView.as_view(), name='customers_list'), #15.04.2025 VRBAT - zákazníci propojení
+    path('report_items/', DeliveryItemListView.as_view(), name='delivery_item_list'),  #15.04.2025 VRBAT - Seznam položek dodávky
 ]
