@@ -27,6 +27,7 @@ pouzite technologie:
     python manage.py startapp
     pip install django-report-builder (pip install git+https://github.com/bradleyg/django-report-builder.git - aktualizace, nekompatibilita python 5.0+)
     rozšíření naistalováno ručně: SQLite Viewer
+    pip install weasyprint - tisk do PDF libka
     
 bash taháky:
     pip show django                      #ukáže zda django je nainstalované

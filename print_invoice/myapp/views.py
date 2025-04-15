@@ -4,6 +4,12 @@ from .models import DeliveryHeader
 from .models import Customers
 from .models import DeliveryItem
 
+from django.views import View
+from django.http import HttpResponse
+from django.template.loader import get_template
+import weasyprint
+
+
 #třída dodávky - hlavička  
 class DeliveryHeaderListView(ListView):
     model = DeliveryHeader
@@ -103,4 +109,20 @@ class DeliveryItemListView(ListView):
 
         return queryset
 
-    
+class ExportDeliveryPDF(View):
+    def post(self, request, *args, **kwargs):
+        selected_ids = request.POST.getlist('selected_ids')
+
+        if not selected_ids:
+            return HttpResponse("Nevybrali jste žádné položky.", status=400)
+
+        items = DeliveryItem.objects.filter(id__in=selected_ids)
+        template = get_template('export_template.html')
+        html = template.render({'items': items})
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="dodavky.pdf"'
+
+        weasyprint.HTML(string=html).write_pdf(response)
+
+        return response

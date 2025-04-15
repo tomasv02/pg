@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: DejaVu Sans, sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #000; padding: 6px; font-size: 12px; }
+        th { background-color: #eee; }
+    </style>
+</head>
+<body>
+    <h2>Vybrané položky dodávky</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Číslo dodávky</th>
+                <th>Číslo položky</th>
+                <th>Materiál</th>
+                <th>Text materiálu</th>
+                <th>Množství</th>
+                <th>Jednotka</th>
+                <th>Cena bez DPH</th>
+                <th>Měna</th>
+                <th>Datum</th>
+                <th>Čas</th>
+                <th>Založil</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.delivery_number }}</td>
+                <td>{{ item.delivery_item }}</td>
+                <td>{{ item.material }}</td>
+                <td>{{ item.material_text }}</td>
+                <td>{{ item.delivered_qty }}</td>
+                <td>{{ item.delivered_qty_unit }}</td>
+                <td>{{ item.price_unit_no_dph }}</td>
+                <td>{{ item.price_unit_currency }}</td>
+                <td>{{ item.delivery_item_created_on }}</td>
+                <td>{{ item.delivery_item_created_at }}</td>
+                <td>{{ item.delivery_item_created_by }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
