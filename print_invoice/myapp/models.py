@@ -8,7 +8,7 @@ from django.db import models
 # python manage.py migrate - migrování dat
 
 from django.db import models
-
+    
 class DeliveryItem(models.Model):
     delivery_number = models.CharField(max_length=20)  # NEunikátní
     delivery_item = models.CharField(max_length=4)
@@ -25,23 +25,8 @@ class DeliveryItem(models.Model):
     def __str__(self):
         return f"Delivery {self.delivery_number} - {self.delivery_item}"
 
-class DeliveryHeader(models.Model):
-    delivery_number = models.CharField(max_length=20)
-    delivery_type = models.CharField(max_length=2)
-    invoice_number = models.IntegerField(default=0)  
-    invoice_currency = models.CharField(max_length=6)
-    due_date_invoice = models.CharField(max_length=20)
-    customer = models.CharField(max_length=30)
-    delivery_date = models.CharField(max_length=20)
-    delivery_created_on = models.CharField(max_length=20)
-    delivery_created_at = models.CharField(max_length=20)
-    delivery_created_by = models.CharField(max_length=12)
-
-def __str__(self):
-    return f"{self.delivery_number} – {self.customer}"    
-
 class Customers(models.Model):
-    customer_code = models.CharField(max_length=5)
+    customer_code = models.CharField(max_length=5, default='DEFAULT_CODE')
     customer_text = models.CharField(max_length=60)  # Název zákazníka nebo popis
     customer_ico = models.CharField(max_length=20)  # IČO
     customer_street = models.CharField(max_length=128)
@@ -53,3 +38,18 @@ class Customers(models.Model):
 
     def __str__(self):
         return f"{self.customer_code} – {self.customer_text}"
+    
+class DeliveryHeader(models.Model):
+    delivery_number = models.CharField(max_length=20)
+    delivery_type = models.CharField(max_length=2)
+    invoice_number = models.IntegerField(default=0)  
+    invoice_currency = models.CharField(max_length=6)
+    due_date_invoice = models.CharField(max_length=20)
+    customer_code = models.CharField(max_length=5, default='DEFAULT_CODE')
+    delivery_date = models.CharField(max_length=20)
+    delivery_created_on = models.CharField(max_length=20)
+    delivery_created_at = models.CharField(max_length=20)
+    delivery_created_by = models.CharField(max_length=12)
+
+def __str__(self):
+    return f"{self.delivery_number} – {self.customer}"    

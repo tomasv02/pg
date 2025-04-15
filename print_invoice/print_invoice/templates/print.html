@@ -1,27 +1,39 @@
-<!-- <!DOCTYPE html>
-{% load static %}  14.04.2025 VRBAT - spojení css s html
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEST print</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">  14.04.2025 VRBAT - spojení css s html
-</head>
-<body>
-    <h1>TEST PRINT</h1>
-    <p>Get back <a href="/">Home button</a></p>
-</body>
-</html> -->
 <!DOCTYPE html>
+{% load static %}  <!--14.04.2025 VRBAT - spojení css s html-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delivery Header List</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">  <!--14.04.2025 VRBAT - spojení css s html-->
+    <button class="button" onclick="window.location.href='admin/'">Admin mode</button> <!-- 15.04.2025 VRBAT - admin mode-->
+    <button class="button" onclick="window.location.href='/'">Home</button> <!-- 15.04.2025 VRBAT - admin mode-->
+    <script src="{% static 'js/filter.js' %}"></script>
 </head>
 <body>
-    <h1>Delivery Header List</h1>
-
+    <h1>Seznam dodávek</h1>
+    <form method="get" class="centered-form" autocomplete="off">
+        <input type="text" name="delivery_number" placeholder="Delivery Number" value="{{ request.GET.delivery_number }}">
+        <select name="delivery_type" id="delivery_type">
+            <option value="">--Vyberte typ dodávky--</option>
+            <option value="F1" {% if request.GET.delivery_type == 'F1' %}selected{% endif %}>F1 - e-shop</option>
+            <option value="F2" {% if request.GET.delivery_type == 'F2' %}selected{% endif %}>F2 - B2B </option>
+            <option value="F3" {% if request.GET.delivery_type == 'F3' %}selected{% endif %}>F3 - Maloprodej</option>
+        </select>
+        <input type="text" name="invoice_number" placeholder="Invoice Number" value="{{ request.GET.invoice_number }}">
+        <select name="invoice_currency" id="invoice_currency">
+            <option value="">--Vyberte měnu--</option>
+            <option value="USD" {% if request.GET.invoice_currency == 'USD' %}selected{% endif %}>USD</option>
+            <option value="EUR" {% if request.GET.invoice_currency == 'EUR' %}selected{% endif %}>EUR</option>
+            <option value="CZK" {% if request.GET.invoice_currency == 'CZK' %}selected{% endif %}>CZK</option>
+            <option value="GBP" {% if request.GET.invoice_currency == 'CZK' %}selected{% endif %}>GBP</option>
+        </select>
+        <input type="text" name="customer" placeholder="Customer" value="{{ request.GET.customer }}">
+        <input type="text" name="delivery_created_by" placeholder="Delivery Created By" value="{{ request.GET.delivery_created_by }}">
+        <button type="submit">Filtrovat</button>
+        <!-- Tlačítko pro reset -->
+        <a href="{% url 'delivery_header_list' %}" class="reset-button">Zrušit filtr</a>
+    </form>
     <table border="1">
         <thead>
             <tr>
@@ -58,6 +70,5 @@
             {% endfor %}
         </tbody>
     </table>
-
 </body>
 </html>

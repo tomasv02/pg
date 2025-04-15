@@ -21,7 +21,8 @@ from . import views #14/04/2025 VRBAT - zavolání html views
 from myapp.views import DeliveryHeaderListView
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("admin/", admin.site.urls), #pristus do admin modu z homepage
+    path("print/admin/", admin.site.urls), #pristu admin ze stranky print
     path('', views.homepage), #domovská stránka
     path('print/', DeliveryHeaderListView.as_view(), name='delivery_header_list'), #15.04.2025 VRBAT - propojení class view a html print
 ]

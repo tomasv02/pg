@@ -117,10 +117,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '/workspaces/pg/print_invoice/print_invoice/static/') #14/04/2025 VRBAT - přidáno spojení na složku CSS
+    os.path.join(BASE_DIR, 'print_invoice/static/') #15/04/2025 VRBAT - přidáno spojení na složku CSS
+    #  os.path.join(BASE_DIR, '/workspaces/pg/print_invoice/print_invoice/static/') 
 ]
 
 # Default primary key field type

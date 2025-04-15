@@ -8,8 +8,27 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- 14.04.2025 VRBAT - spojení css s html přes django engine-->
 </head>
 <body>
-    <button type="button" onclick="window.location.href='admin/'">Admin mode</button> <!-- 15.04.2025 VRBAT - admin mode-->
-    <h1>TEST MAIN</h1>    
-    <p>Try this button <a href="print/">Print invoice</a></p>
+    <div class="container">
+        <!-- Tlačítko pro přechod do admin módu -->
+        <div class="button-container">
+            <button class="button" onclick="window.location.href='admin/'">Admin Mode</button>
+        </div>
+
+        <!-- Titulní nadpis -->
+        <h1>Seznam dodávek a faktur společnosti Vrba s.r.o</h1>    
+
+        <!-- Odkazy pro různé akce -->
+        <div class="links">
+            <div class="link-item">
+                <a href="print/" class="button">Report dodávky</a>
+            </div>
+            <div class="link-item">
+                <a href="delivery_list/" class="button">Report dodávky</a>
+            </div>
+            <div class="link-item">
+                <a href="reports/" class="button">Report zákazníci</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
