@@ -6,9 +6,16 @@ body {
 }
 
 h1 {
+    text-align: left;
+    color: #2c3e50;
+    margin-bottom: 80px;
+}
+
+h2 {
     text-align: center;
     color: #2c3e50;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
+    font-size: 30px;
 }
 
 table {
@@ -60,7 +67,7 @@ button, .button {
     cursor: pointer; /* Ukazatel při najetí myší */
     transition: all 0.3s ease-in-out; /* Plynulé přechody */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Jemný stín pro zvýraznění */
-    margin: 10px;
+    margin-bottom: 10px;
 }
 
 /* Efekt při najetí myší (hover) */

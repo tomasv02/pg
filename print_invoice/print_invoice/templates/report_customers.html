@@ -10,8 +10,7 @@
 </head>
 <body>
     <button class="button" onclick="window.location.href='/'">Zpět</button>
-    <h1>Seznam zákazníků</h1>
-
+    <h2>Seznam zákazníků</h2>
     <form method="get" class="centered-form" autocomplete="off">
         <input type="text" name="customer_code" placeholder="Kód zákazníka" value="{{ request.GET.customer_code }}">
         <input type="text" name="customer_text" placeholder="Název zákazníka" value="{{ request.GET.customer_text }}">
@@ -19,7 +18,6 @@
         <button type="submit">Filtrovat</button>
         <a href="{% url 'customers_list' %}" class="reset-button">Zrušit filtr</a>
     </form>
-
     <table border="1">
         <thead>
             <tr>

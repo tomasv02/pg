@@ -10,7 +10,7 @@
     <script src="{% static 'js/filter.js' %}"></script>
 </head>
 <body>
-    <h1>Seznam dodávek</h1>
+    <h2>Seznam dodávek</h2>
     <form method="get" class="centered-form" autocomplete="off">
         <input type="text" name="delivery_number" placeholder="číslo dodávky" value="{{ request.GET.delivery_number }}">
         <select name="delivery_type" id="delivery_type">
@@ -33,7 +33,6 @@
         <!-- Tlačítko pro reset -->
         <a href="{% url 'delivery_header_list' %}" class="reset-button">Zrušit filtr</a>
     </form>
-
     </body>
     <table border="1">
         <thead>

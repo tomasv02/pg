@@ -56,4 +56,4 @@ class DeliveryHeader(models.Model):
         return customer.customer_text if customer else "-"
     
     def __str__(self):
-        return f"{self.delivery_number} – {self.customer}"    
+        return f"{self.delivery_number} – {self.customer_code}"    

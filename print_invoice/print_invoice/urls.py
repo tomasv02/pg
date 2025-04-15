@@ -26,6 +26,6 @@ urlpatterns = [
     path("admin/", admin.site.urls), #pristus do admin modu z homepage
     path('', views.homepage), #domovská stránka
     path('print/', DeliveryHeaderListView.as_view(), name='delivery_header_list'), #15.04.2025 VRBAT - propojení class view a html print
-    path('report_customers/', CustomersListView.as_view(), name='customers_list'), #15.04.2025 VRBAT - zákazníci propojení
-    path('report_items/', DeliveryItemListView.as_view(), name='delivery_item_list'),  #15.04.2025 VRBAT - Seznam položek dodávky
+    path('report_customers/', CustomersListView.as_view(), name='customers_list'), #15.04.2025 VRBAT - zákazníci propojení view
+    path('report_items/', DeliveryItemListView.as_view(), name='delivery_item_list'),  #15.04.2025 VRBAT - Seznam položek dodávky view
 ]
