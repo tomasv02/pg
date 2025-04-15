@@ -17,7 +17,7 @@ class DeliveryHeaderListView(ListView):
         delivery_type = self.request.GET.get('delivery_type')
         invoice_number = self.request.GET.get('invoice_number')
         invoice_currency = self.request.GET.get('invoice_currency')
-        customer = self.request.GET.get('customer')
+        customer_code = self.request.GET.get('customer_code')
         delivery_created_by = self.request.GET.get('delivery_created_by')
 
         if delivery_number:
@@ -28,8 +28,8 @@ class DeliveryHeaderListView(ListView):
             queryset = queryset.filter(invoice_number__icontains=invoice_number)
         if invoice_currency:
             queryset = queryset.filter(invoice_currency__iexact=invoice_currency)
-        if customer:
-            queryset = queryset.filter(customer__icontains=customer)
+        if customer_code:
+            queryset = queryset.filter(customer_code__icontains=customer_code)
         if delivery_created_by:
             queryset = queryset.filter(delivery_created_by__icontains=delivery_created_by)
 

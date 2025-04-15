@@ -28,7 +28,7 @@
             <option value="CZK" {% if request.GET.invoice_currency == 'CZK' %}selected{% endif %}>CZK</option>
             <option value="GBP" {% if request.GET.invoice_currency == 'CZK' %}selected{% endif %}>GBP</option>
         </select>
-        <input type="text" name="customer" placeholder="Customer" value="{{ request.GET.customer }}">
+        <input type="text" name="customer_code" placeholder="Customer" value="{{ request.GET.customer_code }}">
         <input type="text" name="delivery_created_by" placeholder="Delivery Created By" value="{{ request.GET.delivery_created_by }}">
         <button type="submit">Filtrovat</button>
         <!-- Tlačítko pro reset -->
@@ -57,7 +57,7 @@
                 <td>{{ header.invoice_number }}</td>
                 <td>{{ header.invoice_currency }}</td>
                 <td>{{ header.due_date_invoice }}</td>
-                <td>{{ header.customer }}</td>
+                <td>{{ header.customer_code }}</td>
                 <td>{{ header.delivery_date }}</td>
                 <td>{{ header.delivery_created_on }}</td>
                 <td>{{ header.delivery_created_at }}</td>

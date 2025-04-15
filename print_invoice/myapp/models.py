@@ -6,8 +6,6 @@ from django.db import models
 #Vždy po úpravě dělej: 
 # python manage.py makemigrations - vytvoření migrace
 # python manage.py migrate - migrování dat
-
-from django.db import models
     
 class DeliveryItem(models.Model):
     delivery_number = models.CharField(max_length=20)  # NEunikátní
@@ -26,7 +24,7 @@ class DeliveryItem(models.Model):
         return f"Delivery {self.delivery_number} - {self.delivery_item}"
 
 class Customers(models.Model):
-    customer_code = models.CharField(max_length=5, default='DEFAULT_CODE')
+    customer_code = models.CharField(max_length=5)
     customer_text = models.CharField(max_length=60)  # Název zákazníka nebo popis
     customer_ico = models.CharField(max_length=20)  # IČO
     customer_street = models.CharField(max_length=128)
@@ -45,7 +43,7 @@ class DeliveryHeader(models.Model):
     invoice_number = models.IntegerField(default=0)  
     invoice_currency = models.CharField(max_length=6)
     due_date_invoice = models.CharField(max_length=20)
-    customer_code = models.CharField(max_length=5, default='DEFAULT_CODE')
+    customer_code = models.CharField(max_length=5)
     delivery_date = models.CharField(max_length=20)
     delivery_created_on = models.CharField(max_length=20)
     delivery_created_at = models.CharField(max_length=20)
