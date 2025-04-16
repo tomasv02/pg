@@ -8,7 +8,7 @@ from django.db import models
 # python manage.py migrate - migrování dat
     
 class DeliveryItem(models.Model):
-    delivery_number = models.CharField(max_length=20)  # NEunikátní
+    delivery_number = models.CharField(max_length=20) 
     delivery_item = models.CharField(max_length=4)
     material = models.CharField(max_length=5)
     material_text = models.CharField(max_length=40)
@@ -49,7 +49,7 @@ class DeliveryHeader(models.Model):
     delivery_created_at = models.CharField(max_length=20)
     delivery_created_by = models.CharField(max_length=12)
 
-    @property #view do tabulky Customers, pro kod z hlavicky najde text v tabulce zakazniku
+    @property #propojení do tabulky Customers, pro kód z hlavicky najde text v tabulce zakazniku
     def customer_text(self):
         from .models import Customers
         customer = Customers.objects.filter(customer_code=self.customer_code).first()
