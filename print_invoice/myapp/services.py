@@ -1,13 +1,7 @@
+#15/04/2025 VRBAT - # business funkce a logika zde
 from .models import DeliveryHeader
-from datetime import datetime
-
-#15/04/2025 VRBAT - # filtrování dodávek
-
-class DeliveryService:
-    @staticmethod
-    def get_all_deliveries():
-        return DeliveryHeader.objects.all()
-
+from .models import Customers
+from .models import DeliveryItem
 
 class DeliveryHeaderFilterService:
     def __init__(self, request):
