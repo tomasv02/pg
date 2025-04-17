@@ -74,8 +74,9 @@ class DeliveryItemFilterService:
 from .models import Customers, DeliveryItem, DeliveryHeader
 
 CURRENCY_RATES = {
-    "EUR": 25.0,
-    "USD": 23.0,
+    "EUR": 25.010,
+    "USD": 22.024,
+    "GBP": 29.138,
     "CZK": 1.0,
 }
 

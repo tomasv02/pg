@@ -2,11 +2,12 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Faktura</title>
+    {% for delivery in deliveries %}
+    <title>Faktura č. {{ delivery.header.invoice_number }}</title>
     <style>
         @page {
             size: A4;
-            margin: 20mm;
+            margin: 18mm;
         }
 
         body {
@@ -19,7 +20,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
-            table-layout: fixed;
+            table-layout: auto;
         }
 
         th, td {
@@ -39,7 +40,13 @@
             text-align: right;
         }
 
-        h1, h2, h3 {
+        h1, {
+            margin-top: 20px;
+            margin-bottom: 5px;
+            font-size: 19px;
+        }
+
+        h2, h3 {
             margin-top: 20px;
             margin-bottom: 5px;
             font-size: 14px;
@@ -57,7 +64,7 @@
         .flex-table {
             width: 100%;
             display: table;
-            table-layout: fixed;
+            table-layout: auto;
             margin-bottom: 20px;
         }
 
@@ -92,9 +99,7 @@
     </style>
 </head>
 <body>
-
-{% for delivery in deliveries %}
-    <h1><strong>Faktura:</strong> {{ delivery.header.invoice_number }}</h1>
+    <h1><strong>Faktura - daňový doklad č. </strong> {{ delivery.header.invoice_number }}</h1>
     <p><strong>Dodávka č.:</strong> {{ delivery.header.delivery_number }}</p>
     <p><strong>Měna:</strong> {{ delivery.header.invoice_currency }}</p>
     <p><strong>Datum dodání:</strong> {{ delivery.header.delivery_date }}</p>
@@ -129,8 +134,8 @@
                 <th>Č.</th>
                 <th>Materiál</th>
                 <th>Popis</th>
-                <th>Množství</th>
-                <th>Jednotka</th>
+                <th>MN</th>
+                <th>MJ</th>
                 <th>Cena/ks (bez DPH)</th>
                 <th>Celkem bez DPH</th>
                 <th>Celkem s DPH</th>
@@ -157,10 +162,28 @@
     <p>
         <strong>Celkem bez DPH:</strong> {{ delivery.summary.total_no_dph }} CZK<br>
         <strong>Celkem s DPH:</strong> {{ delivery.summary.total_with_dph }} CZK<br>
-        <h2>Celkem k úhradě: {{ delivery.summary.total_converted }} {{ delivery.summary.currency }}</h2>
         <strong>Celkem v měně faktury:</strong> {{ delivery.summary.total_invoice_currency_no_dph }} {{ delivery.header.invoice_currency }}
     </p>
     <hr>
+    <h1>Celkem k úhradě: {{ delivery.summary.total_converted_with_dph  }} {{ delivery.summary.currency }}</h1>
 {% endfor %}
 </body>
+<footer class="footer-note">
+    <p class="watermark">NEPLAŤTE!! – VYTVOŘENO PRO STUDIJNÍ ÚČELY</p>
+  </footer>
+  
+  <style>
+    .footer-note {
+      text-align: left;
+      padding: 20px 0;
+    }
+  
+    .watermark {
+      font-size: 18px;
+      font-weight: bold;
+      color: rgba(128, 128, 128, 0.4); /* šedivá, průhledná */
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  </style>
 </html>
