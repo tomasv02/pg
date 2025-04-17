@@ -1,15 +1,21 @@
+/* ========================= */
 /* 17/04/2025 VRBAT - CSS pro PDF export */
+/* ========================= */
+
+/* Nastavení stránky pro tisk */
 @page {
     size: A4;
     margin: 18mm;
 }
 
+/* Základní styly pro tělo dokumentu */
 body {
     font-family: DejaVu Sans, sans-serif;
     font-size: 10px;
     margin: 0;
 }
 
+/* Obecné styly pro tabulky */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -17,6 +23,7 @@ table {
     table-layout: auto;
 }
 
+/* Styly pro buňky tabulek */
 th, td {
     border: 1px solid #ccc;
     padding: 6px;
@@ -25,36 +32,43 @@ th, td {
     font-size: 10px;
 }
 
+/* Hlavička tabulky */
 th {
     background-color: #f0f0f0;
     font-weight: bold;
 }
 
+/* Zarovnání čísel doprava */
 td.num {
     text-align: right;
 }
 
-h1, {
+/* Nadpis 1. úrovně */
+h1 {
     margin-top: 20px;
     margin-bottom: 5px;
     font-size: 19px;
 }
 
+/* Nadpisy 2. a 3. úrovně */
 h2, h3 {
     margin-top: 20px;
     margin-bottom: 5px;
     font-size: 14px;
 }
 
+/* Odstavce */
 p {
     margin: 2px 0;
     font-size: 10px;
 }
 
+/* Vodorovná čára */
 hr {
     margin: 30px 0;
 }
 
+/* Flexibilní dvousloupcové rozvržení */
 .flex-table {
     width: 100%;
     display: table;
@@ -68,6 +82,7 @@ hr {
     padding-right: 20px;
 }
 
+/* Styly pro tisk */
 @media print {
     body {
         font-size: 9px;
@@ -91,107 +106,19 @@ hr {
     }
 }
 
+/* ========================= */
+/* Poznámka na konci dokumentu */
+/* ========================= */
+
 .footer-note {
     text-align: left;
     padding: 20px 0;
-  }
+}
 
-  .watermark {
+.watermark {
     font-size: 18px;
     font-weight: bold;
     color: rgba(128, 128, 128, 0.4); /* šedivá, průhledná */
     text-transform: uppercase;
     letter-spacing: 2px;
-  }
-
-  @page {
-    size: A4;
-    margin: 18mm;
-}
-
-body {
-    font-family: DejaVu Sans, sans-serif;
-    font-size: 10px;
-    margin: 0;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    table-layout: auto;
-}
-
-th, td {
-    border: 1px solid #ccc;
-    padding: 6px;
-    text-align: left;
-    word-wrap: break-word;
-    font-size: 10px;
-}
-
-th {
-    background-color: #f0f0f0;
-    font-weight: bold;
-}
-
-td.num {
-    text-align: right;
-}
-
-h1, {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    font-size: 19px;
-}
-
-h2, h3 {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    font-size: 14px;
-}
-
-p {
-    margin: 2px 0;
-    font-size: 10px;
-}
-
-hr {
-    margin: 30px 0;
-}
-
-.flex-table {
-    width: 100%;
-    display: table;
-    table-layout: auto;
-    margin-bottom: 20px;
-}
-
-.flex-cell {
-    display: table-cell;
-    vertical-align: top;
-    padding-right: 20px;
-}
-
-@media print {
-    body {
-        font-size: 9px;
-    }
-
-    table {
-        width: 100%;
-        font-size: 9px;
-    }
-
-    th, td {
-        padding: 5px;
-    }
-
-    hr {
-        margin-top: 20px;
-    }
-
-    h2, h3 {
-        font-size: 12px;
-    }
 }

@@ -4,7 +4,99 @@
     <meta charset="UTF-8">
     {% for delivery in deliveries %}
     <title>Faktura č. {{ delivery.header.invoice_number }}</title>
-    <link rel="stylesheet" href="{% static 'css/stylepdf.css' %}"> <!-- 14.04.2025 VRBAT - spojení css s html přes django engine-->
+    <style>
+        @page {
+            size: A4;
+            margin: 18mm;
+        }
+
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 10px;
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            table-layout: auto;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: left;
+            word-wrap: break-word;
+            font-size: 10px;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        td.num {
+            text-align: right;
+        }
+
+        h1,{
+            margin-top: 20px;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        h2, h3 {
+            margin-top: 20px;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        p {
+            margin: 2px 0;
+            font-size: 10px;
+        }
+
+        hr {
+            margin: 30px 0;
+        }
+
+        .flex-table {
+            width: 100%;
+            display: table;
+            table-layout: auto;
+            margin-bottom: 20px;
+        }
+
+        .flex-cell {
+            display: table-cell;
+            vertical-align: top;
+            padding-right: 20px;
+        }
+
+        @media print {
+            body {
+                font-size: 9px;
+            }
+
+            table {
+                width: 100%;
+                font-size: 9px;
+            }
+
+            th, td {
+                padding: 5px;
+            }
+
+            hr {
+                margin-top: 20px;
+            }
+
+            h2, h3 {
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
     <h1><strong>Faktura - daňový doklad č. </strong> {{ delivery.header.invoice_number }}</h1>
@@ -79,4 +171,19 @@
 <footer class="footer-note">
     <p class="watermark">NEPLAŤTE!! – VYTVOŘENO PRO STUDIJNÍ ÚČELY</p>
   </footer>
+  
+  <style>
+    .footer-note {
+      text-align: left;
+      padding: 20px 0;
+    }
+  
+    .watermark {
+      font-size: 18px;
+      font-weight: bold;
+      color: rgba(128, 128, 128, 0.4); /* šedivá, průhledná */
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  </style>
 </html>
