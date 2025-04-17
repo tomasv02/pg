@@ -71,66 +71,116 @@ class DeliveryItemFilterService:
         return self.queryset
     
 #logika dopočty do PDF exportu faktury (DPH, konečné součty atp.)
-from decimal import Decimal
-from .models import DeliveryHeader, DeliveryItem, Customers
+from .models import Customers, DeliveryItem, DeliveryHeader
 
-class DeliveryItemService:
-    def __init__(self, item: DeliveryItem):
-        self.item = item
+CURRENCY_RATES = {
+    "EUR": 25.0,
+    "USD": 23.0,
+    "CZK": 1.0,
+}
 
-    @property
-    def total_no_dph(self):
-        return self.item.price_unit_no_dph * self.item.delivered_qty
+DEFAULT_VAT_RATE = 0.21  # 21 %
 
-    @property
-    def dph(self):
-        return self.total_no_dph * Decimal("0.21")
 
-    @property
-    def total_with_dph(self):
-        return self.total_no_dph + self.dph
+class CurrencyConverter:
+    def __init__(self, target_currency):
+        self.target_currency = target_currency
+        self.rate = CURRENCY_RATES.get(target_currency, 1.0)
+
+    def convert(self, amount):
+        return round(amount / self.rate, 2)
+
+
+class CustomerInfoBuilder:
+    def __init__(self, customer_code):
+        self.customer = Customers.objects.filter(customer_code=customer_code).first()
+
+    def build(self):
+        c = self.customer
+        if not c:
+            return {
+                "name": "-",
+                "ico": "-",
+                "address": "-",
+                "email": "-",
+                "phone": "-",
+            }
+
+        return {
+            "name": c.customer_text,
+            "ico": c.customer_ico,
+            "address": f"{c.customer_street} {c.customer_cp}, {c.customer_zip} {c.customer_city}",
+            "email": c.customer_email,
+            "phone": c.customer_phone,
+        }
+
+
+class DeliveryItemProcessor:
+    def __init__(self, items, vat_rate, converter):
+        self.items = items
+        self.vat_rate = vat_rate
+        self.converter = converter
+
+    def process_items(self):
+        processed = []
+
+        for item in self.items:
+            total_price = float(item.price_unit_no_dph) * item.delivered_qty
+            total_price_vat = total_price * (1 + self.vat_rate)
+
+            converted_price = self.converter.convert(total_price)
+            converted_price_vat = self.converter.convert(total_price_vat)
+
+            processed.append({
+                "item_number": item.delivery_item,
+                "material": item.material,
+                "description": item.material_text,
+                "quantity": item.delivered_qty,
+                "unit": item.delivered_qty_unit,
+                "price_per_unit": item.price_unit_no_dph,
+                "currency": item.price_unit_currency,
+                "total_price": round(total_price, 2),
+                "total_price_vat": round(total_price_vat, 2),
+                "total_price_converted": converted_price,
+                "total_price_vat_converted": converted_price_vat,
+                "converted_currency": self.converter.target_currency,
+                "created_on": item.delivery_item_created_on,
+                "created_at": item.delivery_item_created_at,
+                "created_by": item.delivery_item_created_by,
+            })
+
+        return processed
 
 
 class DeliveryService:
-    def __init__(self, delivery):
-        self.delivery = delivery
-        self.items = DeliveryItem.objects.filter(delivery_number=delivery.delivery_number)
-        self.customer = Customers.objects.filter(customer_code=delivery.customer_code).first()
-
-    def get_items_data(self):
-        result = []
-        for item in self.items:
-            item_service = DeliveryItemService(item)
-            result.append({
-                "material": item.material,
-                "text": item.material_text,
-                "qty": item.delivered_qty,
-                "unit": item.delivered_qty_unit,
-                "price_unit": item.price_unit_no_dph,
-                "total_no_dph": item_service.total_no_dph,
-                "dph": item_service.dph,
-                "total_with_dph": item_service.total_with_dph,
-            })
-        return result
-
-    @property
-    def total_no_dph(self):
-        return sum(DeliveryItemService(item).total_no_dph for item in self.items)
-
-    @property
-    def total_dph(self):
-        return sum(DeliveryItemService(item).dph for item in self.items)
-
-    @property
-    def total_with_dph(self):
-        return sum(DeliveryItemService(item).total_with_dph for item in self.items)
+    def __init__(self, delivery_header: DeliveryHeader):
+        self.delivery_header = delivery_header
+        self.converter = CurrencyConverter(delivery_header.invoice_currency)
 
     def as_dict(self):
+        customer_info = CustomerInfoBuilder(self.delivery_header.customer_code).build()
+        items = DeliveryItem.objects.filter(delivery_number=self.delivery_header.delivery_number)
+        item_processor = DeliveryItemProcessor(items, DEFAULT_VAT_RATE, self.converter)
+
+        processed_items = item_processor.process_items()
+
         return {
-            "header": self.delivery,  # Zde máme DeliveryHeader
-            "customer": self.customer,
-            "items": self.get_items_data(),
-            "total_no_dph": self.total_no_dph,
-            "total_dph": self.total_dph,
-            "total_with_dph": self.total_with_dph
+            "header": self.delivery_header,
+            "customer": customer_info,
+            "items": processed_items,
+            "summary": self.calculate_summary(processed_items)
+        }
+
+    def calculate_summary(self, items):
+        total_no_dph = sum(item["total_price"] for item in items)
+        total_with_dph = sum(item["total_price_vat"] for item in items)
+        total_converted = sum(item["total_price_converted"] for item in items)
+        total_converted_with_dph = sum(item["total_price_vat_converted"] for item in items)
+
+        return {
+            "total_no_dph": round(total_no_dph, 2),
+            "total_with_dph": round(total_with_dph, 2),
+            "total_converted": round(total_converted, 2),
+            "total_converted_with_dph": round(total_converted_with_dph, 2),
+            "currency": self.delivery_header.invoice_currency,
         }

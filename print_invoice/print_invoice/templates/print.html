@@ -38,7 +38,7 @@
     <!-- FORMULÁŘ PRO ODESLÁNÍ VÝBĚRU -->
     <form method="post" action="{% url 'export_selected_deliveries' %}">
         {% csrf_token %}
-        <button type="submit" class="button">Exportovat vybrané do PDF</button>
+        <button type="submit" class="button">Tisk faktury PDF</button>
         <table border="1">
             <thead>
                 <tr>
@@ -59,7 +59,7 @@
             <tbody>
                 {% for header in headers %}
                 <tr>
-                    <td><input type="checkbox" name="selected_ids" value="{{ header.id }}"></td>
+                    <td><input type="radio" name="selected_id" value="{{ header.id }}"></td>
                     <td>{{ header.delivery_number }}</td>
                     <td>{{ header.delivery_type }}</td>
                     <td>{{ header.invoice_number }}</td>

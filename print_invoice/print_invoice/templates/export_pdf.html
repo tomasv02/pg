@@ -2,87 +2,165 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Faktura - Dodávka {{ delivery.header.delivery_number }}</title>
+    <title>Faktura</title>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; margin: 40px; color: #333; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #aaa; padding: 5px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        .totals { margin-top: 20px; width: 40%; float: right; border: 1px solid #aaa; }
-        .totals td { padding: 6px; }
-        .signature { margin-top: 80px; display: flex; justify-content: space-between; }
-        .signature div { width: 40%; text-align: center; }
-        .footer { text-align: center; margin-top: 30px; font-size: 11px; color: #777; }
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 10px;
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            table-layout: fixed;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: left;
+            word-wrap: break-word;
+            font-size: 10px;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        td.num {
+            text-align: right;
+        }
+
+        h1, h2, h3 {
+            margin-top: 20px;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        p {
+            margin: 2px 0;
+            font-size: 10px;
+        }
+
+        hr {
+            margin: 30px 0;
+        }
+
+        .flex-table {
+            width: 100%;
+            display: table;
+            table-layout: fixed;
+            margin-bottom: 20px;
+        }
+
+        .flex-cell {
+            display: table-cell;
+            vertical-align: top;
+            padding-right: 20px;
+        }
+
+        @media print {
+            body {
+                font-size: 9px;
+            }
+
+            table {
+                width: 100%;
+                font-size: 9px;
+            }
+
+            th, td {
+                padding: 5px;
+            }
+
+            hr {
+                margin-top: 20px;
+            }
+
+            h2, h3 {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Faktura – Dodávka č. {{ delivery.header.delivery_number }}</h1>
-        <p>Datum vystavení: {{ delivery.header.delivery_created_on }}</p>
-        <p>Datum dodání: {{ delivery.header.delivery_date }}</p>
+{% for delivery in deliveries %}
+    <h1><strong>Faktura:</strong> {{ delivery.header.invoice_number }}</h1>
+    <p><strong>Dodávka č.:</strong> {{ delivery.header.delivery_number }}</p>
+    <p><strong>Měna:</strong> {{ delivery.header.invoice_currency }}</p>
+    <p><strong>Datum dodání:</strong> {{ delivery.header.delivery_date }}</p>
+
+    <div class="flex-table">
+        <div class="flex-cell">
+            <h3>Dodavatel</h3>
+            <p>
+                <strong>Název:</strong> Tomáš Vrba<br>
+                <strong>IČO:</strong> 85124587<br>
+                <strong>Adresa:</strong> Na stráni 1221/12, Plzeň 23<br>
+                <strong>Email:</strong> tomas.vrba@vrba.cz<br>
+                <strong>Telefon:</strong> 741 587 985
+            </p>
+        </div>
+        <div class="flex-cell">
+            <h3>Odběratel</h3>
+            <p>
+                <strong>Název:</strong> {{ delivery.customer.name }}<br>
+                <strong>IČO:</strong> {{ delivery.customer.ico }}<br>
+                <strong>Adresa:</strong> {{ delivery.customer.address }}<br>
+                <strong>Email:</strong> {{ delivery.customer.email }}<br>
+                <strong>Telefon:</strong> {{ delivery.customer.phone }}
+            </p>
+        </div>
     </div>
 
-    <div class="company-info">
-        <p>Dodavatel:</p>
-        Firma s.r.o.<br>
-        Ulice 123<br>
-        100 00 Praha<br>
-        IČO: 12345678<br>
-        DIČ: CZ12345678<br>
-        Email: info@firma.cz
-    </div>
-
-    <div class="customer-info">
-        <p>Odběratel:</p>
-        {% if delivery.customer %}
-            {{ delivery.customer.customer_text }}<br>
-            {{ delivery.customer.customer_street }} {{ delivery.customer.customer_cp }}<br>
-            {{ delivery.customer.customer_zip }} {{ delivery.customer.customer_city }}<br>
-            IČO: {{ delivery.customer.customer_ico }}<br>
-            DIČ: {{ delivery.customer.customer_dic }}
-        {% else %}
-            {{ delivery.header.customer_code }}<br>
-            {{ delivery.header.customer_text }}
-        {% endif %}
-    </div>
-
+    <h3>Položky</h3>
     <table>
         <thead>
             <tr>
+                <th>Č.</th>
                 <th>Materiál</th>
                 <th>Popis</th>
                 <th>Množství</th>
-                <th>MJ</th>
-                <th>Cena/ks bez DPH</th>
-                <th>DPH</th>
+                <th>Jednotka</th>
+                <th>Cena/ks (bez DPH)</th>
+                <th>Celkem bez DPH</th>
                 <th>Celkem s DPH</th>
+                <th>Celkem ({{ delivery.header.invoice_currency }})</th>
             </tr>
         </thead>
         <tbody>
             {% for item in delivery.items %}
-            <tr>
-                <td>{{ item.material }}</td>
-                <td>{{ item.text }}</td>
-                <td>{{ item.qty }}</td>
-                <td>{{ item.unit }}</td>
-                <td>{{ item.price_unit|floatformat:2 }} Kč</td>
-                <td>{{ item.dph|floatformat:2 }} Kč</td>
-                <td>{{ item.total_with_dph|floatformat:2 }} Kč</td>
-            </tr>
+                <tr>
+                    <td>{{ item.item_number }}</td>
+                    <td>{{ item.material }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.unit }}</td>
+                    <td>{{ item.price_per_unit }} {{ item.currency }}</td>
+                    <td>{{ item.total_price }} {{ item.currency }}</td>
+                    <td>{{ item.total_price_vat }} {{ item.currency }}</td>
+                    <td>{{ item.total_price_converted }} {{ item.converted_currency }}</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
-
-    <table class="totals">
-        <tr><td>Celkem bez DPH:</td><td>{{ delivery.total_no_dph|floatformat:2 }} Kč</td></tr>
-        <tr><td>DPH 21 %:</td><td>{{ delivery.total_dph|floatformat:2 }} Kč</td></tr>
-        <tr><td><strong>Celkem s DPH:</strong></td><td><strong>{{ delivery.total_with_dph|floatformat:2 }} Kč</strong></td></tr>
-    </table>
-
-    <div class="footer">
-        Vygenerováno dne {{ now|date:"d.m.Y H:i" }} • Interní systém firmy
-    </div>
-
+    <h3>Souhrn</h3>
+    <p>
+        <strong>Celkem bez DPH:</strong> {{ delivery.summary.total_no_dph }} CZK<br>
+        <strong>Celkem s DPH:</strong> {{ delivery.summary.total_with_dph }} CZK<br>
+        <h2>Celkem k úhradě: {{ delivery.summary.total_converted }} {{ delivery.summary.currency }}</h2>
+        <strong>Celkem v měně faktury:</strong> {{ delivery.summary.total_invoice_currency_no_dph }} {{ delivery.header.invoice_currency }}
+    </p>
+    <hr>
+{% endfor %}
 </body>
 </html>

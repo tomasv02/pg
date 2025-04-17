@@ -42,20 +42,23 @@ class DeliveryItemListView(ListView):
 @csrf_exempt
 def export_selected_deliveries(request):
     if request.method == "POST":
-        ids = request.POST.getlist('selected_ids')
-        deliveries = DeliveryHeader.objects.filter(id__in=ids)
+        selected_id = request.POST.get('selected_id')  # pro radio button
+        if not selected_id:
+            return HttpResponse("Nebyla vybrána žádná dodávka.", status=400)
 
-        enriched_deliveries = []
-        for delivery in deliveries:
-            delivery_service = DeliveryService(delivery)
-            enriched_deliveries.append(delivery_service.as_dict())
+        delivery = DeliveryHeader.objects.filter(id=selected_id).first()
+        if not delivery:
+            return HttpResponse("Dodávka nebyla nalezena.", status=404)
+
+        delivery_service = DeliveryService(delivery)
+        enriched_delivery = delivery_service.as_dict()
 
         html_string = render_to_string("export_pdf.html", {
-            'deliveries': enriched_deliveries
+            'deliveries': [enriched_delivery]  # stále list kvůli šabloně
         })
 
         html = HTML(string=html_string)
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = f'inline; filename="faktura_{enriched_deliveries[0]["header"].invoice_number}.pdf"'
+        response['Content-Disposition'] = f'inline; filename="faktura_{enriched_delivery["header"].invoice_number}.pdf"'
         html.write_pdf(target=response)
         return response

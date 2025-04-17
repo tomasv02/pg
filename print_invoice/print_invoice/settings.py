@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'myapp', #14.04.2025 VRBAT - přidání databáze
     'import_export', #14.04.2025 VRBAT - import data json přes admina
+    'django.contrib.humanize', #17.04.2025 VRBAT - rozdělování částek na řády
 ]
 
 MIDDLEWARE = [
