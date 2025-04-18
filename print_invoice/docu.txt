@@ -24,11 +24,10 @@ po kazdy zmene databaze:
 pouzite technologie: 
     django framework
     django-import-export 
-    python manage.py startapp
-    pip install django-report-builder (pip install git+https://github.com/bradleyg/django-report-builder.git - aktualizace, nekompatibilita python 5.0+)
-    rozšíření naistalováno ručně: SQLite Viewer
     pip install weasyprint - tisk do PDF libka
-    
+    python manage.py startapp
+    rozšíření naistalováno ručně: SQLite Viewer
+ 
 bash taháky:
     pip show django                      #ukáže zda django je nainstalované
     pip install django                   #instalace django
@@ -44,4 +43,5 @@ bash taháky:
     python manage.py makemigrations myapp  #vytvoření migrace
     python manage.py migrate             #migrování dat
     pip install django-import-export     #do admina instalace možnosti importu a exportu dat z excelu
+    pip list                             # ukáže, co je nainstalované
 
