@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load format_filters %}
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
@@ -59,22 +60,22 @@
                     <td>{{ item.description }}</td>
                     <td>{{ item.quantity }}</td>
                     <td>{{ item.unit }}</td>
-                    <td>{{ item.price_per_unit }} {{ item.currency }}</td>
-                    <td>{{ item.total_price }} {{ item.currency }}</td>
-                    <td>{{ item.total_price_vat }} {{ item.currency }}</td>
-                    <td>{{ item.total_price_converted }} {{ item.converted_currency }}</td>
+                    <td>{{ item.price_per_unit|price_number }} {{ item.currency }}</td>
+                    <td>{{ item.total_price|price_number }} {{ item.currency }}</td>
+                    <td>{{ item.total_price_vat|price_number }} {{ item.currency }}</td>
+                    <td>{{ item.total_price_vat_converted|price_number }} {{ item.converted_currency }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
     <h3>Souhrn</h3>
     <p>
-        <strong>Celkem bez DPH:</strong> {{ delivery.summary.total_no_dph }} CZK<br>
-        <strong>Celkem s DPH:</strong> {{ delivery.summary.total_with_dph }} CZK<br>
-        <strong>Celkem v měně faktury:</strong> {{ delivery.summary.total_invoice_currency_no_dph }} {{ delivery.header.invoice_currency }}
+        <strong>Celkem bez DPH:</strong> {{ delivery.summary.total_no_dph|price_number }} CZK<br>
+        <strong>Celkem s DPH:</strong> {{ delivery.summary.total_with_dph|price_number }} CZK<br>
+        <strong>Celkem v měně faktury:</strong> {{ delivery.summary.total_invoice_currency_with_dph|price_number }} {{ delivery.header.invoice_currency }}
     </p>
     <hr>
-    <h1>Celkem k úhradě: {{ delivery.summary.total_converted_with_dph  }} {{ delivery.summary.currency }}</h1>
+    <h1>Celkem k úhradě: {{ delivery.summary.total_converted_with_dph|price_number  }} {{ delivery.summary.currency }}</h1>
 {% endfor %}
 </body>
 <footer class="footer-note">

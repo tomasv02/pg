@@ -10,14 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+
 from pathlib import Path
 import os #14/04/2025 VRBAT - kvůli css
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-%o6bpefnq0ugrm57&8rbjx%*4$nh$1w_c+nbz%6tck!)84t^cv"
@@ -37,7 +36,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'myapp', #14.04.2025 VRBAT - přidání databáze
+    'myapp', #14.04.2025 VRBAT - přidání aplikací
     'import_export', #14.04.2025 VRBAT - import data json přes admina
     'django.contrib.humanize', #17.04.2025 VRBAT - rozdělování částek na řády
 ]
@@ -118,13 +117,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [ 
-    os.path.join(BASE_DIR, 'print_invoice/static/css') #15/04/2025 VRBAT - přidáno spojení na složku CSS
+    os.path.join(BASE_DIR, 'print_invoice/static/'), #15/04/2025 VRBAT - přidáno spojení na složku CSS
     #  os.path.join(BASE_DIR, '/workspaces/pg/print_invoice/print_invoice/static/') 
 ]
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

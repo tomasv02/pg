@@ -80,9 +80,7 @@ CURRENCY_RATES = {
     "CZK": 1.0,
 }
 
-DEFAULT_VAT_RATE = 0.21  # 21 %
-
-
+# Třída pro převod měny
 class CurrencyConverter:
     def __init__(self, target_currency):
         self.target_currency = target_currency
@@ -92,6 +90,16 @@ class CurrencyConverter:
         return round(amount / self.rate, 2)
 
 
+#Třída pro výpočet DPH dle měny
+class DPH:
+    def __init__(self, currency):
+        self.currency = currency
+
+    def get_vat_rate(self):
+        return 0.21 if self.currency == "CZK" else 1.0
+
+
+# Data o zákazníkovi
 class CustomerInfoBuilder:
     def __init__(self, customer_code):
         self.customer = Customers.objects.filter(customer_code=customer_code).first()
@@ -116,6 +124,7 @@ class CustomerInfoBuilder:
         }
 
 
+#Zpracování položek dodávky (DPH, konverze)
 class DeliveryItemProcessor:
     def __init__(self, items, vat_rate, converter):
         self.items = items
@@ -153,15 +162,17 @@ class DeliveryItemProcessor:
         return processed
 
 
+# Hlavní služba pro sestavení výstupu pro PDF export
 class DeliveryService:
     def __init__(self, delivery_header: DeliveryHeader):
         self.delivery_header = delivery_header
         self.converter = CurrencyConverter(delivery_header.invoice_currency)
+        self.vat_rate = DPH(delivery_header.invoice_currency).get_vat_rate()
 
     def as_dict(self):
         customer_info = CustomerInfoBuilder(self.delivery_header.customer_code).build()
         items = DeliveryItem.objects.filter(delivery_number=self.delivery_header.delivery_number)
-        item_processor = DeliveryItemProcessor(items, DEFAULT_VAT_RATE, self.converter)
+        item_processor = DeliveryItemProcessor(items, self.vat_rate, self.converter)
 
         processed_items = item_processor.process_items()
 
@@ -185,3 +196,4 @@ class DeliveryService:
             "total_converted_with_dph": round(total_converted_with_dph, 2),
             "currency": self.delivery_header.invoice_currency,
         }
+
