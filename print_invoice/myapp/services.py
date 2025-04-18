@@ -96,7 +96,7 @@ class DPH:
         self.currency = currency
 
     def get_vat_rate(self):
-        return 0.21 if self.currency == "CZK" else 1.0
+        return 0.21  #sazba pro výpočet DPH
 
 
 # Data o zákazníkovi

@@ -40,7 +40,7 @@ class DeliveryItemListView(ListView):
         return filter_service.apply_filters()
 
 
-# výstup pro export do PDF
+# výstup pro export do PDF 
 @csrf_exempt
 def export_selected_deliveries(request):
     if request.method == "POST":
@@ -48,27 +48,37 @@ def export_selected_deliveries(request):
         if not selected_id:
             return HttpResponse("Nebyla vybrána žádná dodávka.", status=400)
 
+        # Získání dodávky podle ID
         delivery = DeliveryHeader.objects.filter(id=selected_id).first()
         if not delivery:
             return HttpResponse("Dodávka nebyla nalezena.", status=404)
 
+        # Vytvoření služby pro dodávku a obohacení dat
         delivery_service = DeliveryService(delivery)
         enriched_delivery = delivery_service.as_dict()
 
-        html_string = render_to_string("export_pdf.html", {
-            'deliveries': [enriched_delivery]  # list kvůli šabloně
-        })
+        # Pokus o generování HTML šablony
+        try:
+            html_string = render_to_string("export_pdf.html", {
+                'deliveries': [enriched_delivery]  # list kvůli šabloně
+            })
+        except Exception as e:
+            return HttpResponse(f"Chyba při generování HTML: {e}", status=500)
 
-        # Absolutní cesta k CSS souboru - tisk faktury do PDF
+        # Absolutní cesta k CSS souboru
         css_path = os.path.join(settings.BASE_DIR, 'print_invoice', 'static', 'css', 'pdf-style.css')
 
-        # Vytvoření PDF
-        html = HTML(string=html_string)
-        css = CSS(filename=css_path)
+        # Pokus o generování PDF
+        try:
+            html = HTML(string=html_string)
+            css = CSS(filename=css_path)
 
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = f'inline; filename="faktura_{enriched_delivery["header"].invoice_number}.pdf"'
-        html.write_pdf(target=response, stylesheets=[css])
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = f'inline; filename="faktura_{enriched_delivery["header"].invoice_number}.pdf"'
+            
+            html.write_pdf(target=response, stylesheets=[css])
+        except Exception as e:
+            return HttpResponse(f"Chyba při generování PDF: {e}", status=500)
 
         return response
     else:

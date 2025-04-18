@@ -10,8 +10,11 @@
 </head>
 <body>
     <h1><strong>Faktura - daňový doklad č. </strong> {{ delivery.header.invoice_number }}</h1>
+    <br>
     <p><strong>Dodávka č.:</strong> {{ delivery.header.delivery_number }}</p>
-    <p><strong>Měna:</strong> {{ delivery.header.invoice_currency }}</p>
+    <p><strong>Založena dne:</strong> {{ delivery.header.delivery_created_on }} v {{ delivery.header.delivery_created_at }}</p>
+    <p><strong>Vystavil/a:</strong> {{ delivery.header.delivery_created_by }}</p>
+    <br>
     <p><strong>Datum dodání:</strong> {{ delivery.header.delivery_date }}</p>
      
     <div class="flex-table">
@@ -36,7 +39,17 @@
             </p>
         </div>
     </div>
-
+    <h3>Platební údaje</h3>
+        <p>
+            <strong>Bankovní účet:</strong> 123456789/0800 (Česká spořitelna)<br>
+            <strong>IBAN:</strong> CZ65 0800 0000 0001 2345 6789<br>
+            <strong>BIC/SWIFT:</strong> GIBACZPX<br>
+            <strong>Variabilní symbol:</strong> {{ delivery.header.invoice_number }}<br>
+            <strong>Datum splatnosti:</strong> {{ delivery.header.due_date_invoice }}<br>
+            <strong>Způsob úhrady:</strong> Převodem
+        </p>
+        <br>
+        <p>Fakturujeme Vám za zboží dodané dle dodacího listu č. {{ delivery.header.delivery_number }}, vystaveného dne {{ delivery.header.delivery_created_on }} následující položky:</p>   
     <h3>Položky</h3>
     <table>
         <thead>
@@ -72,7 +85,9 @@
     <p>
         <strong>Celkem bez DPH:</strong> {{ delivery.summary.total_no_dph|price_number }} CZK<br>
         <strong>Celkem s DPH:</strong> {{ delivery.summary.total_with_dph|price_number }} CZK<br>
-        <strong>Celkem v měně faktury:</strong> {{ delivery.summary.total_invoice_currency_with_dph|price_number }} {{ delivery.header.invoice_currency }}
+        <br>
+        <strong>Měna dokladu:</strong> {{ delivery.header.invoice_currency }}<br>
+        <strong>Celkem v měně faktury:</strong> {{ delivery.summary.total_converted_with_dph|price_number }} {{ delivery.header.invoice_currency }}
     </p>
     <hr>
     <h1>Celkem k úhradě: {{ delivery.summary.total_converted_with_dph|price_number  }} {{ delivery.summary.currency }}</h1>
