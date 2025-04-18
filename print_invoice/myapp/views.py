@@ -65,7 +65,7 @@ def export_selected_deliveries(request):
         except Exception as e:
             return HttpResponse(f"Chyba při generování HTML: {e}", status=500)
 
-        # Absolutní cesta k CSS souboru
+        # Absolutní cesta k CSS souboru - jinak to prostě nejde
         css_path = os.path.join(settings.BASE_DIR, 'print_invoice', 'static', 'css', 'pdf-style.css')
 
         # Pokus o generování PDF
