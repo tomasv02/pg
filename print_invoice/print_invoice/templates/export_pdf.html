@@ -87,7 +87,8 @@
         <strong>Celkem s DPH:</strong> {{ delivery.summary.total_with_dph|price_number }} CZK<br>
         <br>
         <strong>Měna dokladu:</strong> {{ delivery.header.invoice_currency }}<br>
-        <strong>Celkem v měně faktury:</strong> {{ delivery.summary.total_converted_with_dph|price_number }} {{ delivery.header.invoice_currency }}
+        <p><strong>Použitý kurz({{ delivery.header.invoice_currency }}):</strong> {{ delivery.exchange_rate }}</p>
+        <strong>Celkem v měně dokladu:</strong> {{ delivery.summary.total_converted_with_dph|price_number }} {{ delivery.header.invoice_currency }}
     </p>
     <hr>
     <h1>Celkem k úhradě: {{ delivery.summary.total_converted_with_dph|price_number  }} {{ delivery.summary.currency }}</h1>

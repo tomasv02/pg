@@ -73,12 +73,53 @@ class DeliveryItemFilterService:
 #logika dopočty do PDF exportu faktury (DPH, konečné součty atp.)
 from .models import Customers, DeliveryItem, DeliveryHeader
 
-CURRENCY_RATES = {
-    "EUR": 25.010,
-    "USD": 22.024,
-    "GBP": 29.138,
-    "CZK": 1.0,
-}
+import requests
+from datetime import datetime
+
+# URL pro stažení kurzů měn z ČNB
+CURRENCY_API_URL = "https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt"
+
+# Funkce pro stažení kurzů měn a naplnění slovníku
+def fetch_currency_rates():
+    # Získání dnešního data ve formátu potřebném pro ČNB API
+    today_date = datetime.today().strftime('%d.%m.%Y')
+
+    # Stažení kurzů z ČNB API pro dnešní datum
+    response = requests.get(f"{CURRENCY_API_URL}?date={today_date}")
+
+    # Inicializace prázdného slovníku pro uložení kurzů
+    currency_rates = {}
+
+    # Pokud je odpověď úspěšná, zpracujeme data
+    if response.status_code == 200:
+        data = response.text
+        currency_rates = parse_exchange_rates(data)
+    else:
+        raise ValueError("Nepodařilo se stáhnout kurzy měn")
+
+    return currency_rates
+
+# Funkce pro zpracování stažených kurzů z ČNB
+def parse_exchange_rates(data):
+    # Inicializace slovníku pro uložení kurzů
+    currency_rates = {}
+
+    # ČNB vrací kurzy v konkrétním formátu, který budeme zpracovávat po řádcích
+    lines = data.splitlines()
+    for line in lines:
+        parts = line.split('|')
+        if len(parts) > 2:
+            currency = parts[3].strip()  # Kód měny
+            rate_str = parts[4].replace(",", ".")  # Kurz měny
+            try:
+                rate = float(rate_str)
+                currency_rates[currency] = rate
+            except ValueError:
+                continue
+    return currency_rates
+
+# Stažení kurzů a naplnění slovníku CURRENCY_RATES
+CURRENCY_RATES = fetch_currency_rates()
 
 # Třída pro převod měny
 class CurrencyConverter:
@@ -161,7 +202,6 @@ class DeliveryItemProcessor:
 
         return processed
 
-
 # Hlavní služba pro sestavení výstupu pro PDF export
 class DeliveryService:
     def __init__(self, delivery_header: DeliveryHeader):
@@ -180,7 +220,8 @@ class DeliveryService:
             "header": self.delivery_header,
             "customer": customer_info,
             "items": processed_items,
-            "summary": self.calculate_summary(processed_items)
+            "summary": self.calculate_summary(processed_items),
+            "exchange_rate": self.converter.rate,  # použitý kurz v měně pro přepočet 
         }
 
     def calculate_summary(self, items):
