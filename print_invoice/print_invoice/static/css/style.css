@@ -113,3 +113,9 @@ button:active, .button:active {
     text-align: center;
     margin: 0;
 }
+
+/* tiskové tlačítko */
+.print-button {
+    text-align: right;
+    margin-bottom: 10px; /* volitelné – trochu prostoru od tabulky */
+}

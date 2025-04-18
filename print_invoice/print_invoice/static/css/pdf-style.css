@@ -2,13 +2,8 @@
 /* 17/04/2025 VRBAT - CSS pro PDF export */
 /* ========================= */
 
-/* Nastavení stránky pro tisk */
-@page {
-    size: A4;
-    margin: 18mm;
-}
 
-/* Základní styly pro tělo dokumentu */
+/* Základní styly pro tělo dokumentu pro tisk (neovlivní webovou stránku) */
 body {
     font-family: DejaVu Sans, sans-serif;
     font-size: 10px;
@@ -83,33 +78,15 @@ hr {
 }
 
 /* Styly pro tisk */
-@media print {
-    body {
-        font-size: 9px;
-    }
-
-    table {
-        width: 100%;
-        font-size: 9px;
-    }
-
-    th, td {
-        padding: 5px;
-    }
-
-    hr {
-        margin-top: 20px;
-    }
-
-    h2, h3 {
-        font-size: 12px;
-    }
+hr {
+    margin-top: 20px;
 }
 
-/* ========================= */
-/* Poznámka na konci dokumentu */
-/* ========================= */
+h2, h3 {
+    font-size: 12px;
+}
 
+/* Poznámka na konci dokumentu */
 .footer-note {
     text-align: left;
     padding: 20px 0;

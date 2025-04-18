@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-{% load static %}
+{% load static %} <!-- 14.04.2025 VRBAT - spojení css s html-->
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seznam dodávek</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script src="{% static 'js/filter.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">  <!--14.04.2025 VRBAT - spojení css s html přes django engine-->
 </head>
 <body>
     <button class="button" onclick="window.location.href='/'">Zpět</button>
     <h2>Seznam dodávek</h2>
-
-    <!-- FILTR -->
+        <!-- FILTR -->
     <form method="get" class="centered-form" autocomplete="off">
         <input type="text" name="delivery_number" placeholder="číslo dodávky" value="{{ request.GET.delivery_number }}">
         <select name="delivery_type" id="delivery_type">
@@ -38,7 +36,7 @@
     <!-- FORMULÁŘ PRO ODESLÁNÍ VÝBĚRU -->
     <form method="post" action="{% url 'export_selected_deliveries' %}">
         {% csrf_token %}
-        <button type="submit" class="button">Tisk faktury PDF</button>
+            <button type="submit" class="button" style="float: right; margin-right: 340px;">Tisk faktury PDF</button>
         <table border="1">
             <thead>
                 <tr>
