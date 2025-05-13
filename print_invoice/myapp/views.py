@@ -11,7 +11,7 @@ from .services import DeliveryService
 from django.conf import settings
 import os
 
-
+#13/04/2025 VRBAT - view webové aplikace
 class DeliveryHeaderListView(ListView):
     model = DeliveryHeader
     template_name = 'print.html'
@@ -41,7 +41,10 @@ class DeliveryItemListView(ListView):
 
 
 # výstup pro export do PDF 
-@csrf_exempt
+#@csrf_exempt 
+#13/05/2025 VRBAT - dekorátor = vypnutí CSRF ochrany, není potřeba token pro metodu POST 
+# pouze na dev. sys, nikdy ne do produkce!!! - nevím zda nebude potřeba? zatím ok
+
 def export_selected_deliveries(request):
     if request.method == "POST":
         selected_id = request.POST.get('selected_id')  # výběr z radio buttonu v html
@@ -53,11 +56,10 @@ def export_selected_deliveries(request):
         if not delivery:
             return HttpResponse("Dodávka nebyla nalezena.", status=404)
 
-        # Vytvoření služby pro dodávku a obohacení dat
         delivery_service = DeliveryService(delivery)
         enriched_delivery = delivery_service.as_dict()
 
-        # Pokus o generování HTML šablony
+        #generování HTML šablony
         try:
             html_string = render_to_string("export_pdf.html", {
                 'deliveries': [enriched_delivery]  # list kvůli šabloně
@@ -68,7 +70,7 @@ def export_selected_deliveries(request):
         # Absolutní cesta k CSS souboru - jinak to prostě nejde
         css_path = os.path.join(settings.BASE_DIR, 'print_invoice', 'static', 'css', 'pdf-style.css')
 
-        # Pokus o generování PDF
+        # generování PDF
         try:
             html = HTML(string=html_string)
             css = CSS(filename=css_path)
@@ -83,3 +85,5 @@ def export_selected_deliveries(request):
         return response
     else:
         return HttpResponse("Metoda není povolena", status=405)
+    
+    

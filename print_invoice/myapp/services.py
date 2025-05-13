@@ -1,17 +1,20 @@
-#15/04/2025 VRBAT - # business funkce a logika zde
+#15/04/2025 VRBAT - # business funkce a logika implementovat zde
 from .models import DeliveryHeader
 from .models import Customers
 from .models import DeliveryItem
 
-#třídy: filtry na HTML views - logika
-class DeliveryHeaderFilterService:
+import requests #libka http requesty
+from datetime import datetime 
+
+# Filtrování dat
+class DeliveryHeaderFilterService: #hlavička
     def __init__(self, request):
-        self.request = request
-        self.queryset = DeliveryHeader.objects.all()
+        self.request = request #bere vsechny html filtry s parametrem get
+        self.queryset = DeliveryHeader.objects.all() 
 
     def apply_filters(self):
         filters = {
-            'delivery_number': 'icontains',
+            'delivery_number': 'icontains', #icontains = lookup výraz (filtr), vyhledávání záznamů v db
             'delivery_type': 'icontains',
             'invoice_number': 'icontains',
             'invoice_currency': 'iexact',
@@ -22,11 +25,11 @@ class DeliveryHeaderFilterService:
         for field, lookup in filters.items():
             value = self.request.GET.get(field)
             if value:
-                self.queryset = self.queryset.filter(**{f"{field}__{lookup}": value})
+                self.queryset = self.queryset.filter(**{f"{field}__{lookup}": value}) #**kwargs = přejme vše do slovníku
         
         return self.queryset
 
-class CustomersFilterService:
+class CustomersFilterService: #zákazník
     def __init__(self, request):
         self.request = request
         self.queryset = Customers.objects.all()
@@ -45,7 +48,7 @@ class CustomersFilterService:
 
         return self.queryset
 
-class DeliveryItemFilterService:
+class DeliveryItemFilterService: #položka
     def __init__(self, request):
         self.request = request
         self.queryset = DeliveryItem.objects.all()
@@ -70,11 +73,8 @@ class DeliveryItemFilterService:
 
         return self.queryset
     
-#logika dopočty do PDF exportu faktury (DPH, konečné součty atp.)
-from .models import Customers, DeliveryItem, DeliveryHeader
 
-import requests
-from datetime import datetime
+#výpočty do faktury (DPH, konečné součty atp.)
 
 # URL pro stažení kurzů měn z ČNB
 CURRENCY_API_URL = "https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt"
@@ -82,15 +82,15 @@ CURRENCY_API_URL = "https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-deviz
 # Funkce pro stažení kurzů měn a naplnění slovníku
 def fetch_currency_rates():
     # Získání dnešního data ve formátu potřebném pro ČNB API
-    today_date = datetime.today().strftime('%d.%m.%Y')
+    today_date = datetime.today().strftime('%d.%m.%Y') #sy-datum
 
-    # Stažení kurzů z ČNB API pro dnešní datum
+    # Stažení kurzů z ČNB pro dnešní datum
     response = requests.get(f"{CURRENCY_API_URL}?date={today_date}")
 
-    # Inicializace prázdného slovníku pro uložení kurzů
+    # Inicializace prázdného slovníku pro uložení kurzů - clear currency_rates z předchozí instance
     currency_rates = {}
 
-    # Pokud je odpověď úspěšná, zpracujeme data
+    # kontrola, zda kurzy byly staženy; návratové kódy http requestů 200 = OK, 404 = not found
     if response.status_code == 200:
         data = response.text
         currency_rates = parse_exchange_rates(data)
@@ -99,18 +99,17 @@ def fetch_currency_rates():
 
     return currency_rates
 
-# Funkce pro zpracování stažených kurzů z ČNB
+# Funkce pro zpracování stažených kurzů z ČNB - parsování
 def parse_exchange_rates(data):
-    # Inicializace slovníku pro uložení kurzů
     currency_rates = {}
 
-    # ČNB vrací kurzy v konkrétním formátu, který budeme zpracovávat po řádcích
+    # čnb vrací jako řádky s odělovači, nutno rozdělit do slovníku
     lines = data.splitlines()
     for line in lines:
         parts = line.split('|')
         if len(parts) > 2:
-            currency = parts[3].strip()  # Kód měny
-            rate_str = parts[4].replace(",", ".")  # Kurz měny
+            currency = parts[3].strip()  # kód měny
+            rate_str = parts[4].replace(",", ".")  # kurz měny
             try:
                 rate = float(rate_str)
                 currency_rates[currency] = rate
@@ -164,7 +163,6 @@ class CustomerInfoBuilder:
             "phone": c.customer_phone,
         }
 
-
 #Zpracování položek dodávky (DPH, konverze)
 class DeliveryItemProcessor:
     def __init__(self, items, vat_rate, converter):
@@ -202,7 +200,7 @@ class DeliveryItemProcessor:
 
         return processed
 
-# Hlavní služba pro sestavení výstupu pro PDF export
+# sestavení výstupu pro PDF export
 class DeliveryService:
     def __init__(self, delivery_header: DeliveryHeader):
         self.delivery_header = delivery_header
@@ -221,7 +219,7 @@ class DeliveryService:
             "customer": customer_info,
             "items": processed_items,
             "summary": self.calculate_summary(processed_items),
-            "exchange_rate": self.converter.rate,  # použitý kurz v měně pro přepočet 
+            "exchange_rate": self.converter.rate,  #použitý kurz v měně pro přepočet 
         }
 
     def calculate_summary(self, items):
