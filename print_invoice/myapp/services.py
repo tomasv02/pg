@@ -6,8 +6,8 @@ from .models import DeliveryItem
 import requests #libka http requesty
 from datetime import datetime 
 
-# Filtrování dat
-class DeliveryHeaderFilterService: #hlavička
+# Třída hlavička dodávky 
+class DeliveryHeaderFilterService: 
     def __init__(self, request):
         self.request = request #bere vsechny html filtry s parametrem get
         self.queryset = DeliveryHeader.objects.all() 
@@ -29,7 +29,8 @@ class DeliveryHeaderFilterService: #hlavička
         
         return self.queryset
 
-class CustomersFilterService: #zákazník
+# Třída zákazník
+class CustomersFilterService: 
     def __init__(self, request):
         self.request = request
         self.queryset = Customers.objects.all()
@@ -48,7 +49,8 @@ class CustomersFilterService: #zákazník
 
         return self.queryset
 
-class DeliveryItemFilterService: #položka
+# Třída položka dodávky
+class DeliveryItemFilterService: 
     def __init__(self, request):
         self.request = request
         self.queryset = DeliveryItem.objects.all()
@@ -73,62 +75,53 @@ class DeliveryItemFilterService: #položka
 
         return self.queryset
     
+#Třída měna
+class Mena:
+    CURRENCY_API_URL = "https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt"
 
-#výpočty do faktury (DPH, konečné součty atp.)
-
-# URL pro stažení kurzů měn z ČNB
-CURRENCY_API_URL = "https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt"
-
-# Funkce pro stažení kurzů měn a naplnění slovníku
-def fetch_currency_rates():
-    # Získání dnešního data ve formátu potřebném pro ČNB API
-    today_date = datetime.today().strftime('%d.%m.%Y') #sy-datum
-
-    # Stažení kurzů z ČNB pro dnešní datum
-    response = requests.get(f"{CURRENCY_API_URL}?date={today_date}")
-
-    # Inicializace prázdného slovníku pro uložení kurzů - clear currency_rates z předchozí instance
-    currency_rates = {}
-
-    # kontrola, zda kurzy byly staženy; návratové kódy http requestů 200 = OK, 404 = not found
-    if response.status_code == 200:
-        data = response.text
-        currency_rates = parse_exchange_rates(data)
-    else:
-        raise ValueError("Nepodařilo se stáhnout kurzy měn")
-
-    return currency_rates
-
-# Funkce pro zpracování stažených kurzů z ČNB - parsování
-def parse_exchange_rates(data):
-    currency_rates = {}
-
-    # čnb vrací jako řádky s odělovači, nutno rozdělit do slovníku
-    lines = data.splitlines()
-    for line in lines:
-        parts = line.split('|')
-        if len(parts) > 2:
-            currency = parts[3].strip()  # kód měny
-            rate_str = parts[4].replace(",", ".")  # kurz měny
-            try:
-                rate = float(rate_str)
-                currency_rates[currency] = rate
-            except ValueError:
-                continue
-    return currency_rates
-
-# Stažení kurzů a naplnění slovníku CURRENCY_RATES
-CURRENCY_RATES = fetch_currency_rates()
-
-# Třída pro převod měny
-class CurrencyConverter:
-    def __init__(self, target_currency):
+    def __init__(self, target_currency='CZK'):
         self.target_currency = target_currency
-        self.rate = CURRENCY_RATES.get(target_currency, 1.0)
+        self.currency_rates = self.fetch_currency_rates()
 
-    def convert(self, amount):
-        return round(amount / self.rate, 2)
+    def fetch_currency_rates(self):
+        today_date = datetime.today().strftime('%d.%m.%Y')
+        response = requests.get(f"{self.CURRENCY_API_URL}?date={today_date}")
 
+        if response.status_code != 200:
+            raise ValueError("Nepodařilo se stáhnout kurzy měn")
+
+        return self.parse_exchange_rates(response.text)
+
+    def parse_exchange_rates(self, data):
+        rates = {'CZK': 1.0}
+        lines = data.splitlines()
+        for line in lines:
+            parts = line.split('|')
+            if len(parts) > 4:
+                currency = parts[3].strip()
+                try:
+                    rate = float(parts[4].replace(',', '.'))
+                    rates[currency] = rate
+                except ValueError:
+                    continue
+        return rates
+
+    def get_rate(self, currency):
+        return self.currency_rates.get(currency, None)
+
+    def convert(self, amount, from_currency, to_currency):
+        if from_currency == to_currency:
+            return round(amount, 2)
+
+        from_rate = self.get_rate(from_currency)
+        to_rate = self.get_rate(to_currency)
+
+        if from_rate is None or to_rate is None:
+            raise ValueError(f"Neznámý kurz pro měnu {from_currency} nebo {to_currency}")
+
+        amount_in_czk = amount * from_rate
+        converted_amount = amount_in_czk / to_rate
+        return round(converted_amount, 2)
 
 #Třída pro výpočet DPH dle měny
 class DPH:
@@ -136,10 +129,9 @@ class DPH:
         self.currency = currency
 
     def get_vat_rate(self):
-        return 0.21  #sazba pro výpočet DPH
+        return 0.21
 
-
-# Data o zákazníkovi
+# Data o zákazníkovi - odběratel
 class CustomerInfoBuilder:
     def __init__(self, customer_code):
         self.customer = Customers.objects.filter(customer_code=customer_code).first()
@@ -154,7 +146,6 @@ class CustomerInfoBuilder:
                 "email": "-",
                 "phone": "-",
             }
-
         return {
             "name": c.customer_text,
             "ico": c.customer_ico,
@@ -165,7 +156,7 @@ class CustomerInfoBuilder:
 
 #Zpracování položek dodávky (DPH, konverze)
 class DeliveryItemProcessor:
-    def __init__(self, items, vat_rate, converter):
+    def __init__(self, items, vat_rate, converter: Mena):
         self.items = items
         self.vat_rate = vat_rate
         self.converter = converter
@@ -177,8 +168,8 @@ class DeliveryItemProcessor:
             total_price = float(item.price_unit_no_dph) * item.delivered_qty
             total_price_vat = total_price * (1 + self.vat_rate)
 
-            converted_price = self.converter.convert(total_price)
-            converted_price_vat = self.converter.convert(total_price_vat)
+            converted_price = self.converter.convert(total_price, item.price_unit_currency, self.converter.target_currency)
+            converted_price_vat = self.converter.convert(total_price_vat, item.price_unit_currency, self.converter.target_currency)
 
             processed.append({
                 "item_number": item.delivery_item,
@@ -204,7 +195,7 @@ class DeliveryItemProcessor:
 class DeliveryService:
     def __init__(self, delivery_header: DeliveryHeader):
         self.delivery_header = delivery_header
-        self.converter = CurrencyConverter(delivery_header.invoice_currency)
+        self.converter = Mena(delivery_header.invoice_currency)
         self.vat_rate = DPH(delivery_header.invoice_currency).get_vat_rate()
 
     def as_dict(self):
@@ -219,7 +210,7 @@ class DeliveryService:
             "customer": customer_info,
             "items": processed_items,
             "summary": self.calculate_summary(processed_items),
-            "exchange_rate": self.converter.rate,  #použitý kurz v měně pro přepočet 
+            "exchange_rate": self.converter.get_rate(self.delivery_header.invoice_currency),
         }
 
     def calculate_summary(self, items):
@@ -235,4 +226,3 @@ class DeliveryService:
             "total_converted_with_dph": round(total_converted_with_dph, 2),
             "currency": self.delivery_header.invoice_currency,
         }
-
