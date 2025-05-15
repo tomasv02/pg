@@ -41,9 +41,9 @@ class DeliveryItemListView(ListView):
 
 
 # výstup pro export do PDF 
-#@csrf_exempt 
+@csrf_exempt 
 #13/05/2025 VRBAT - dekorátor = vypnutí CSRF ochrany, není potřeba token pro metodu POST 
-# pouze na dev. sys, nikdy ne do produkce!!! - nevím zda nebude potřeba? zatím ok
+# pouze na dev. sys, nikdy ne do produkce!!! - vyhodí to Forbidden (403) 
 
 def export_selected_deliveries(request):
     if request.method == "POST":
