@@ -123,7 +123,7 @@ class Mena:
         converted_amount = amount_in_czk / to_rate
         return round(converted_amount, 2)
 
-#Třída pro výpočet DPH dle měny
+#Třída DPH dle měny
 class DPH:
     def __init__(self, currency):
         self.currency = currency
