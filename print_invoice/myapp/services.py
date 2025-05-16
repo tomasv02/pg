@@ -131,7 +131,7 @@ class DPH:
     def get_vat_rate(self):
         return 0.21
 
-# Data o zákazníkovi - odběratel
+# Třída zákazník 
 class CustomerInfoBuilder:
     def __init__(self, customer_code):
         self.customer = Customers.objects.filter(customer_code=customer_code).first()
