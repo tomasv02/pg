@@ -6,7 +6,7 @@ from .models import DeliveryItem
 import requests #libka http requesty
 from datetime import datetime 
 
-# Třída hlavička dodávky 
+# Třída hlavička dodávky - filtr
 class DeliveryHeaderFilterService: 
     def __init__(self, request):
         self.request = request #bere vsechny html filtry s parametrem get
@@ -29,7 +29,7 @@ class DeliveryHeaderFilterService:
         
         return self.queryset
 
-# Třída zákazník
+# Třída zákazník - filtr
 class CustomersFilterService: 
     def __init__(self, request):
         self.request = request
@@ -49,7 +49,7 @@ class CustomersFilterService:
 
         return self.queryset
 
-# Třída položka dodávky
+# Třída položka dodávky - filtr
 class DeliveryItemFilterService: 
     def __init__(self, request):
         self.request = request
@@ -154,7 +154,7 @@ class CustomerInfoBuilder:
             "phone": c.customer_phone,
         }
 
-#Zpracování položek dodávky (DPH, konverze)
+#Třída položka dodávky - zpracování
 class DeliveryItemProcessor:
     def __init__(self, items, vat_rate, converter: Mena):
         self.items = items
@@ -191,7 +191,7 @@ class DeliveryItemProcessor:
 
         return processed
 
-# sestavení výstupu pro PDF export
+# Třída dodávka - kompletace
 class DeliveryService:
     def __init__(self, delivery_header: DeliveryHeader):
         self.delivery_header = delivery_header
